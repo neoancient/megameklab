@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import megamek.common.Aero;
 import megamek.common.BattleArmor;
+import megamek.common.HandheldWeapon;
 import megamek.common.Infantry;
 import megamek.common.Mech;
 import megamek.common.Tank;
@@ -59,6 +60,10 @@ public class ITab extends JPanel {
     
     public Infantry getInfantry() {
     	return (Infantry) eSource.getEntity();
+    }
+    
+    public HandheldWeapon getHandheld() {
+    	return (HandheldWeapon) eSource.getEntity();
     }
 
 }

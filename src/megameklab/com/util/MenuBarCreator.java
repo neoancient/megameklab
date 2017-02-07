@@ -51,6 +51,7 @@ import megamek.common.BattleArmor;
 import megamek.common.ConvFighter;
 import megamek.common.Entity;
 import megamek.common.GunEmplacement;
+import megamek.common.HandheldWeapon;
 import megamek.common.Infantry;
 import megamek.common.Jumpship;
 import megamek.common.Mech;
@@ -386,6 +387,16 @@ public class MenuBarCreator extends JMenuBar implements ClipboardOwner {
 
             });
             unitMenu.add(item);
+        }
+        
+        if (!(parentFrame.getEntity() instanceof HandheldWeapon)) {
+        	item = new JMenuItem();
+        	item.setText("Handheld Weapon");
+        	item.setMnemonic(KeyEvent.VK_H);
+        	item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H,
+        			Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        	item.addActionListener(e -> jMenuLoadHandheld());
+        	unitMenu.add(item);
         }
 
         file.add(unitMenu);
@@ -1013,6 +1024,11 @@ public class MenuBarCreator extends JMenuBar implements ClipboardOwner {
     private void jMenuLoadInfantry() {
     	new megameklab.com.ui.Infantry.MainUI();
         parentFrame.dispose();
+    }
+    
+    private void jMenuLoadHandheld() {
+    	new megameklab.com.ui.handheld.MainUI();
+    	parentFrame.dispose();
     }
 
     private void jMenuPrintCurrentUnit() {
