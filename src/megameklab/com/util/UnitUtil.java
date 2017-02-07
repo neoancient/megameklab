@@ -2192,7 +2192,7 @@ public class UnitUtil {
 
         if (UnitUtil.isHeatSink(eq) || UnitUtil.isArmorOrStructure(eq)
                 || UnitUtil.isJumpJet(eq)
-                || UnitUtil.isMechEquipment(eq, (Mech) unit)) {
+                || UnitUtil.isMechEquipment(eq, unit)) {
             return false;
         }
 
@@ -2318,7 +2318,7 @@ public class UnitUtil {
         }
         return false;
     }
-
+    
     public static boolean isAeroEquipment(EquipmentType eq, Aero unit) {
 
         if (UnitUtil.isArmorOrStructure(eq)) {
@@ -2354,7 +2354,7 @@ public class UnitUtil {
         return false;
     }
 
-    public static boolean isMechEquipment(EquipmentType eq, Mech unit) {
+    public static boolean isMechEquipment(EquipmentType eq, Entity unit) {
 
         if (UnitUtil.isArmorOrStructure(eq)) {
             return false;
@@ -2578,6 +2578,34 @@ public class UnitUtil {
         return false;
     }
 
+    public static boolean isHandheldWeapon(EquipmentType eq, Entity unit) {
+    	if (eq instanceof WeaponType
+    			&& (eq instanceof megamek.common.weapons.ISHGaussRifle
+    					|| eq instanceof megamek.common.weapons.ISIHGaussRifle
+    					|| eq.hasFlag(WeaponType.F_B_POD)
+    					|| eq.hasFlag(WeaponType.F_C3M))) {
+    		return false;
+    	}
+    	
+    	return isMechWeapon(eq, unit);
+    }
+
+    public static boolean isHandheldEquipment(EquipmentType eq, Entity unit) {
+    	if (eq instanceof WeaponType) {
+    		return eq.hasFlag(WeaponType.F_TAG)
+    				&& !eq.hasFlag(WeaponType.F_C3M)
+    				&& !eq.hasFlag(WeaponType.F_C3MBS)
+    				&& isMechEquipment(eq, unit);
+    	}
+    	return eq instanceof MiscType
+    			&& (eq.hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER)
+    					|| eq.hasFlag(MiscType.F_ARTEMIS)
+    					|| eq.hasFlag(MiscType.F_ARTEMIS_V)
+    					|| eq.hasFlag(MiscType.F_APOLLO)
+    					|| eq.hasFlag(MiscType.F_PPC_CAPACITOR)
+    					|| eq.hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE));
+    }
+    
     public static boolean canSwarm(BattleArmor ba) {
 
         for (Mounted eq : ba.getEquipment()) {
