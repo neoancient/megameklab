@@ -2633,7 +2633,8 @@ public class UnitUtil {
     					|| eq.hasFlag(MiscType.F_ARTEMIS_V)
     					|| eq.hasFlag(MiscType.F_APOLLO)
     					|| eq.hasFlag(MiscType.F_PPC_CAPACITOR)
-    					|| eq.hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE));
+    					|| eq.hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE)
+    					|| eq.hasFlag(MiscType.F_LASER_INSULATOR));
     }
     
     public static boolean canSwarm(BattleArmor ba) {
