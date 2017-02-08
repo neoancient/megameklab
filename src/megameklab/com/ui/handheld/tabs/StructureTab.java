@@ -64,7 +64,6 @@ import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.HandheldWeapon;
 import megamek.common.LocationFullException;
-import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
@@ -134,6 +133,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
     
     private JSpinner spnArmorTonnage;
     private JLabel lblArmorPoints = new JLabel();
+    private JTextField txtHeatSinks = new JTextField();
 
     public static String getTypeName(int type) {
         switch(type) {
@@ -228,6 +228,8 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         setFieldSize(model, comboSize);
         setFieldSize(techType, comboSize);
         setFieldSize(techLevel, comboSize);
+        setFieldSize(txtHeatSinks, comboSize);
+        txtHeatSinks.setEditable(false);
 
         basicPanel.setBorder(BorderFactory.createTitledBorder("Basic Information"));
         
@@ -422,6 +424,14 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         gbc.weightx = 1.0;
         loadoutPanel.add(lblArmorPoints, gbc);
         spnArmorTonnage.addChangeListener(this);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
+        loadoutPanel.add(createLabel("Heat Sinks:", labelSize), gbc);
+        gbc.gridx = 1;
+        loadoutPanel.add(txtHeatSinks, gbc);
                 
         leftPanel.add(loadoutPanel);
 
@@ -553,8 +563,11 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         }
         filterEquipment();
         updateEquipment();
+        
         spnArmorTonnage.setValue(getHandheld().getLabArmorTonnage());
         lblArmorPoints.setText("(" + getHandheld().getLabTotalArmorPoints() + " Points)");
+        txtHeatSinks.setText(Integer.toString(getHandheld().getNumHeatSinks()));
+        
     	handlersActive = true;
         fireTableRefresh();
     }
@@ -736,6 +749,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             removeAllEquipment();
             addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         }
+        getHandheld().setNumHeatSinks(UnitUtil.getHandheldHeat(getHandheld()));
         fireTableRefresh();
         refresh.refreshAll();
     }
@@ -805,26 +819,6 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         }
     }
 
-    private void removeHeatSinks() {
-        int location = 0;
-        for (; location < equipmentList.getRowCount();) {
-
-            Mounted mount = (Mounted) equipmentList.getValueAt(location, CriticalTableModel.EQUIPMENT);
-            EquipmentType eq = mount.getType();
-            if ((eq instanceof MiscType) && (UnitUtil.isHeatSink(mount))) {
-                try {
-                    equipmentList.removeCrit(location);
-                } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    return;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else {
-                location++;
-            }
-        }
-    }
-
     private void addEquipment(EquipmentType equip) {
         boolean success = false;
         Mounted mount = null;
@@ -846,13 +840,11 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
     }
 
     public void updateEquipment() {
-        removeHeatSinks();
         equipmentList.removeAllCrits();
         loadEquipmentTable();
     }
 
     public void removeAllEquipment() {
-        removeHeatSinks();
         for (int count = 0; count < equipmentList.getRowCount(); count++) {
             equipmentList.removeMounted(count);
         }
