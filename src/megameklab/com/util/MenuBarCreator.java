@@ -344,7 +344,8 @@ public class MenuBarCreator extends JMenuBar implements ClipboardOwner {
             unitMenu.add(item);
         }
 
-        if (!(parentFrame.getEntity() instanceof Tank)) {
+        if (!(parentFrame.getEntity() instanceof Tank)
+        		|| parentFrame.getEntity() instanceof HandheldWeapon) {
             item = new JMenuItem();
             item.setText("Combat Vehicle");
             item.setMnemonic(KeyEvent.VK_T);
