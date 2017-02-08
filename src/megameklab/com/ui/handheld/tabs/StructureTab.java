@@ -21,6 +21,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
@@ -78,7 +79,7 @@ import megameklab.com.util.XTableColumnModel;
  * @author Neoancient
  *
  */
-public class StructureTab extends ITab implements ActionListener {
+public class StructureTab extends ITab implements ActionListener, KeyListener {
 
 	private static final long serialVersionUID = -1262535227804234003L;
 
@@ -179,18 +180,22 @@ public class StructureTab extends ITab implements ActionListener {
         basicPanel.add(createLabel("Chassis:", labelSize), gbc);
         gbc.gridx = 1;
         basicPanel.add(chassis, gbc);
+        chassis.addKeyListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
         basicPanel.add(createLabel("Model:", labelSize), gbc);
         gbc.gridx = 1;
         basicPanel.add(model, gbc);
+        model.addKeyListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         basicPanel.add(createLabel("Year:", labelSize), gbc);
         gbc.gridx = 1;
         basicPanel.add(era, gbc);
+        era.addKeyListener(this);
+        era.addKeyListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -1051,4 +1056,41 @@ public class StructureTab extends ITab implements ActionListener {
             return ((Comparable<Integer>)l0).compareTo(l1);
         }
     }
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (!handlersActive) {
+			return;
+		}
+        if (e.getSource().equals(era)) {
+            try {
+                int year = Integer.parseInt(era.getText());
+                if (year < 1950) {
+                    return;
+                }
+                getTank().setYear(Integer.parseInt(era.getText()));
+            } catch (Exception ex) {
+                getHandheld().setYear(3145);
+            }
+            refresh.refreshEquipment();
+        } else if (e.getSource().equals(source)) {
+            getTank().setSource(source.getText());
+        } else if (e.getSource().equals(chassis)) {
+            getTank().setChassis(chassis.getText().trim());
+            refresh.refreshPreview();
+            refresh.refreshHeader();
+        } else if (e.getSource().equals(model)) {
+            getTank().setModel(model.getText().trim());
+            refresh.refreshPreview();
+            refresh.refreshHeader();
+        }
+	}
 }
