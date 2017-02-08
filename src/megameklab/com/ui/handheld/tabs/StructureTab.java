@@ -228,7 +228,6 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         setFieldSize(model, comboSize);
         setFieldSize(techType, comboSize);
         setFieldSize(techLevel, comboSize);
-        setFieldSize(txtHeatSinks, comboSize);
         txtHeatSinks.setEditable(false);
 
         basicPanel.setBorder(BorderFactory.createTitledBorder("Basic Information"));
@@ -421,17 +420,18 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         gbc.gridx = 1;
         loadoutPanel.add(spnArmorTonnage, gbc);
         gbc.gridx = 2;
-        gbc.weightx = 1.0;
+        gbc.insets = new Insets(0, 4, 0, 0);
         loadoutPanel.add(lblArmorPoints, gbc);
         spnArmorTonnage.addChangeListener(this);
         
         gbc.gridx = 0;
         gbc.gridy = 4;
-        gbc.weightx = 0.0;
+        gbc.insets = new Insets(0, 0, 0, 0);
         gbc.fill = GridBagConstraints.NONE;
         loadoutPanel.add(createLabel("Heat Sinks:", labelSize), gbc);
         gbc.gridx = 1;
         loadoutPanel.add(txtHeatSinks, gbc);
+        setFieldSize(txtHeatSinks, spinnerSize);
                 
         leftPanel.add(loadoutPanel);
 
@@ -565,7 +565,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         updateEquipment();
         
         spnArmorTonnage.setValue(getHandheld().getLabArmorTonnage());
-        lblArmorPoints.setText("(" + getHandheld().getLabTotalArmorPoints() + " Points)");
+        lblArmorPoints.setText(getHandheld().getLabTotalArmorPoints() + " Points");
         txtHeatSinks.setText(Integer.toString(getHandheld().getNumHeatSinks()));
         
     	handlersActive = true;

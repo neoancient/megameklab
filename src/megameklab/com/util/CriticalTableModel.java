@@ -29,6 +29,7 @@ import javax.swing.table.TableColumn;
 import megamek.common.AmmoType;
 import megamek.common.BattleArmor;
 import megamek.common.Entity;
+import megamek.common.HandheldWeapon;
 import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.Tank;
@@ -78,6 +79,10 @@ public class CriticalTableModel extends AbstractTableModel {
         
         if (unit instanceof Tank) {
             columnNames[CRITS] = "Slots";
+        }
+        
+        if (unit instanceof HandheldWeapon) {
+        	columnNames[LOCATION] = "Shots";
         }
         
         this.unit = unit;
@@ -139,9 +144,13 @@ public class CriticalTableModel extends AbstractTableModel {
             return UnitUtil.getCritName(unit, crit.getType());
         case TONNAGE:
             if ((unit instanceof BattleArmor) 
-                    && (crit.getType() instanceof AmmoType)){
+                    && (crit.getType() instanceof AmmoType)) {
                 return ((AmmoType)crit.getType()).getKgPerShot() * 
                         crit.getBaseShotsLeft() / 1000;
+            } else if ((unit instanceof HandheldWeapon)
+            		&& (crit.getType() instanceof AmmoType)) {
+            	return ((double)crit.getBaseShotsLeft())
+            			/ ((AmmoType)crit.getType()).getShots();
             } else if (crit.getType().hasFlag(MiscType.F_DETACHABLE_WEAPON_PACK)
                     && crit.getLinked() != null){
                 return crit.getLinked().getType().getTonnage(unit) * 0.75;
@@ -149,6 +158,9 @@ public class CriticalTableModel extends AbstractTableModel {
                 return crit.getType().getTonnage(unit);
             }
         case CRITS:
+        	if (unit instanceof HandheldWeapon) {
+        		return crit.getType() instanceof WeaponType? 1:0;
+        	}
             if (unit instanceof Tank) {
                 return crit.getType().getTankslots(unit);
             }
@@ -167,6 +179,12 @@ public class CriticalTableModel extends AbstractTableModel {
             if (unit instanceof BattleArmor){
                 return ((BattleArmor) unit).getBaMountLocAbbr(crit
                         .getBaMountLoc());
+            } else if (unit instanceof HandheldWeapon) {
+            	if (crit.getType() instanceof AmmoType) {
+            		return crit.getBaseShotsLeft();
+            	} else {
+            		return "";
+            	}
             } else {
                 return unit.getLocationAbbr(crit.getLocation());
             }
