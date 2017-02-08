@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -49,7 +50,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
@@ -79,7 +83,7 @@ import megameklab.com.util.XTableColumnModel;
  * @author Neoancient
  *
  */
-public class StructureTab extends ITab implements ActionListener, KeyListener {
+public class StructureTab extends ITab implements ActionListener, ChangeListener, KeyListener {
 
 	private static final long serialVersionUID = -1262535227804234003L;
 
@@ -115,7 +119,6 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
     private JRadioButton rbtnStats = new JRadioButton("Stats");
     private JRadioButton rbtnFluff = new JRadioButton("Fluff");
 
-
     private TableRowSorter<EquipmentTableModel> equipmentSorter;
 
     private CriticalTableModel equipmentList;
@@ -128,6 +131,9 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
     private String ADD_COMMAND = "ADD";
     private String REMOVE_COMMAND = "REMOVE";
     private String REMOVEALL_COMMAND = "REMOVEALL";
+    
+    private JSpinner spnArmorTonnage;
+    private JLabel lblArmorPoints = new JLabel();
 
     public static String getTypeName(int type) {
         switch(type) {
@@ -377,14 +383,56 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         loadoutPanel.setBorder(BorderFactory.createTitledBorder("Current Loadout"));
         databasePanel.setBorder(BorderFactory.createTitledBorder("Equipment Database"));
 
+        JPanel panRemoveBtns = new JPanel();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.WEST;
+        loadoutPanel.add(panRemoveBtns, gbc);
+        panRemoveBtns.add(removeButton);
+        removeButton.setActionCommand(REMOVE_COMMAND);
+        removeButton.addActionListener(this);
+        panRemoveBtns.add(removeAllButton);
+        removeAllButton.setActionCommand(REMOVEALL_COMMAND);
+        removeAllButton.addActionListener(this);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        loadoutPanel.add(equipmentScroll, gbc);
+
+        Dimension spinnerSize = new Dimension(55, 25);
+
+        spnArmorTonnage = new JSpinner(new SpinnerNumberModel(0.0, 0.0, null, 0.5));
+        ((JSpinner.DefaultEditor) spnArmorTonnage.getEditor()).setSize(spinnerSize);
+        ((JSpinner.DefaultEditor) spnArmorTonnage.getEditor())
+                .setMaximumSize(spinnerSize);
+        ((JSpinner.DefaultEditor) spnArmorTonnage.getEditor())
+                .setPreferredSize(spinnerSize);
+        ((JSpinner.DefaultEditor) spnArmorTonnage.getEditor())
+                .setMinimumSize(spinnerSize);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        loadoutPanel.add(new JLabel("Armor Tonnage:"), gbc);
+        gbc.gridx = 1;
+        loadoutPanel.add(spnArmorTonnage, gbc);
+        gbc.gridx = 2;
+        gbc.weightx = 1.0;
+        loadoutPanel.add(lblArmorPoints, gbc);
+        spnArmorTonnage.addChangeListener(this);
+                
+        leftPanel.add(loadoutPanel);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(2,2,2,2);
-        gbc.fill = java.awt.GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
         gbc.weighty = 0.0;
-        gbc.anchor = java.awt.GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.WEST;
         databasePanel.add(addButton, gbc);
         addButton.setActionCommand(ADD_COMMAND);
         addButton.addActionListener(this);
@@ -392,7 +440,7 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        gbc.fill = java.awt.GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
         gbc.weighty = 0.0;
         databasePanel.add(choiceType, gbc);
@@ -413,27 +461,6 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         gbc.weighty = 0.0;
         databasePanel.add(viewPanel, gbc);
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = java.awt.GridBagConstraints.NONE;
-        gbc.weightx = 0.0;
-        gbc.weighty = 0.0;
-        loadoutPanel.add(removeButton, gbc);
-        removeButton.setActionCommand(REMOVE_COMMAND);
-        removeButton.addActionListener(this);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = java.awt.GridBagConstraints.NONE;
-        gbc.weightx = 0.0;
-        gbc.weighty = 0.0;
-        gbc.anchor = java.awt.GridBagConstraints.WEST;
-        loadoutPanel.add(removeAllButton, gbc);
-        removeAllButton.setActionCommand(REMOVEALL_COMMAND);
-        removeAllButton.addActionListener(this);
-
         gbc.insets = new Insets(2,0,0,0);
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -442,17 +469,6 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         databasePanel.add(masterEquipmentScroll, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        gbc.fill = java.awt.GridBagConstraints.VERTICAL;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        loadoutPanel.add(equipmentScroll, gbc);
-
-        leftPanel.add(loadoutPanel);
-
     }
 
     public JLabel createLabel(String text, Dimension maxSize) {
@@ -537,6 +553,8 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         }
         filterEquipment();
         updateEquipment();
+        spnArmorTonnage.setValue(getHandheld().getLabArmorTonnage());
+        lblArmorPoints.setText("(" + getHandheld().getLabTotalArmorPoints() + " Points)");
     	handlersActive = true;
         fireTableRefresh();
     }
@@ -722,7 +740,57 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
         refresh.refreshAll();
     }
 
-    private void loadEquipmentTable() {
+	@Override
+	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (!handlersActive) {
+			return;
+		}
+        if (e.getSource().equals(era)) {
+            try {
+                int year = Integer.parseInt(era.getText());
+                if (year < 1950) {
+                    return;
+                }
+                getTank().setYear(Integer.parseInt(era.getText()));
+            } catch (Exception ex) {
+                getHandheld().setYear(3145);
+            }
+            refresh.refreshEquipment();
+        } else if (e.getSource().equals(source)) {
+            getTank().setSource(source.getText());
+        } else if (e.getSource().equals(chassis)) {
+            getTank().setChassis(chassis.getText().trim());
+            refresh.refreshPreview();
+            refresh.refreshHeader();
+        } else if (e.getSource().equals(model)) {
+            getTank().setModel(model.getText().trim());
+            refresh.refreshPreview();
+            refresh.refreshHeader();
+        }
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		if (!handlersActive) {
+			return;
+		}
+		if (e.getSource().equals(spnArmorTonnage)) {
+			double tonnage = (Double)spnArmorTonnage.getValue();
+			getHandheld().setArmorTonnage(tonnage);
+			getHandheld().initializeArmor((int)Math.floor(tonnage * 16), HandheldWeapon.LOC_GUNS);
+			refresh.refreshAll();
+		}
+	}
+
+	private void loadEquipmentTable() {
 
         for (Mounted mount : getHandheld().getWeaponList()) {
             equipmentList.addCrit(mount);
@@ -1056,41 +1124,4 @@ public class StructureTab extends ITab implements ActionListener, KeyListener {
             return ((Comparable<Integer>)l0).compareTo(l1);
         }
     }
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (!handlersActive) {
-			return;
-		}
-        if (e.getSource().equals(era)) {
-            try {
-                int year = Integer.parseInt(era.getText());
-                if (year < 1950) {
-                    return;
-                }
-                getTank().setYear(Integer.parseInt(era.getText()));
-            } catch (Exception ex) {
-                getHandheld().setYear(3145);
-            }
-            refresh.refreshEquipment();
-        } else if (e.getSource().equals(source)) {
-            getTank().setSource(source.getText());
-        } else if (e.getSource().equals(chassis)) {
-            getTank().setChassis(chassis.getText().trim());
-            refresh.refreshPreview();
-            refresh.refreshHeader();
-        } else if (e.getSource().equals(model)) {
-            getTank().setModel(model.getText().trim());
-            refresh.refreshPreview();
-            refresh.refreshHeader();
-        }
-	}
 }
