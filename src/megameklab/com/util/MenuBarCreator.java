@@ -1276,6 +1276,8 @@ public class MenuBarCreator extends JMenuBar implements ClipboardOwner {
                 newUI = new megameklab.com.ui.Infantry.MainUI();
             } else if (newUnit instanceof Mech) {
                 newUI = new megameklab.com.ui.Mek.MainUI();
+            } else if (newUnit instanceof HandheldWeapon) {
+            	newUI = new megameklab.com.ui.handheld.MainUI();
             } else if ((newUnit instanceof Tank) && !(newUnit instanceof GunEmplacement)) {
                 newUI = new megameklab.com.ui.Vehicle.MainUI();
             }
@@ -1389,6 +1391,8 @@ public class MenuBarCreator extends JMenuBar implements ClipboardOwner {
                     newUI = new megameklab.com.ui.Infantry.MainUI();
                 } else if (tempEntity instanceof Mech) {
                     newUI = new megameklab.com.ui.Mek.MainUI();
+                } else if ((tempEntity instanceof HandheldWeapon)) {
+                	newUI = new megameklab.com.ui.handheld.MainUI();
                 } else if ((tempEntity instanceof Tank)
                         && !(tempEntity instanceof GunEmplacement)) {
                     newUI = new megameklab.com.ui.Vehicle.MainUI();

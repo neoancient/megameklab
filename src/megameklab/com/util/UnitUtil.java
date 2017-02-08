@@ -49,6 +49,7 @@ import megamek.common.BipedMech;
 import megamek.common.CriticalSlot;
 import megamek.common.Entity;
 import megamek.common.EquipmentType;
+import megamek.common.HandheldWeapon;
 import megamek.common.Infantry;
 import megamek.common.LandAirMech;
 import megamek.common.LocationFullException;
@@ -2919,7 +2920,7 @@ public class UnitUtil {
         if (unit instanceof Mech) {
             testEntity = new TestMech((Mech) unit, entityVerifier.mechOption,
                     null);
-        } else if (unit instanceof Tank) {
+        } else if (unit instanceof Tank && !(unit instanceof HandheldWeapon)) {
             if (unit.isSupportVehicle()) {
                 testEntity = new TestSupportVehicle((Tank) unit,
                         entityVerifier.tankOption, null);
