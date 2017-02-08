@@ -382,6 +382,7 @@ public class StructureTab extends ITab implements ActionListener {
         gbc.anchor = java.awt.GridBagConstraints.WEST;
         databasePanel.add(addButton, gbc);
         addButton.setActionCommand(ADD_COMMAND);
+        addButton.addActionListener(this);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -415,6 +416,7 @@ public class StructureTab extends ITab implements ActionListener {
         gbc.weighty = 0.0;
         loadoutPanel.add(removeButton, gbc);
         removeButton.setActionCommand(REMOVE_COMMAND);
+        removeButton.addActionListener(this);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -425,6 +427,7 @@ public class StructureTab extends ITab implements ActionListener {
         gbc.anchor = java.awt.GridBagConstraints.WEST;
         loadoutPanel.add(removeAllButton, gbc);
         removeAllButton.setActionCommand(REMOVEALL_COMMAND);
+        removeAllButton.addActionListener(this);
 
         gbc.insets = new Insets(2,0,0,0);
         gbc.gridx = 0;
@@ -705,8 +708,10 @@ public class StructureTab extends ITab implements ActionListener {
                 equipmentList.removeMounted(row);
             }
             equipmentList.removeCrits(selectedRows);
+            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } else if (e.getActionCommand().equals(REMOVEALL_COMMAND)) {
             removeAllEquipment();
+            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         }
         fireTableRefresh();
         refresh.refreshAll();
@@ -752,10 +757,15 @@ public class StructureTab extends ITab implements ActionListener {
         Mounted mount = null;
         try {
             mount = new Mounted(getHandheld(), equip);
-            getHandheld().addEquipment(mount, Entity.LOC_NONE, false);
+            int loc = Entity.LOC_NONE;
+            if (equip instanceof WeaponType) {
+            	loc = HandheldWeapon.LOC_GUNS;
+            }
+            getHandheld().addEquipment(mount, loc, false);
             success = true;
+            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } catch (LocationFullException lfe) {
-            // this can't happen, we add to Entity.LOC_NONE
+        	//should not happen, since we disable the add button when full.
         }
         if (success) {
             equipmentList.addCrit(mount);
