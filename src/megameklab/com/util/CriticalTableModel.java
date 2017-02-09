@@ -128,10 +128,20 @@ public class CriticalTableModel extends AbstractTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        return false;
+        return unit instanceof HandheldWeapon
+        		&& col == LOCATION && sortedEquipment[row].getType() instanceof AmmoType;
     }
 
-    public Object getValueAt(int row, int col) {
+    @Override
+	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+    	if (unit instanceof HandheldWeapon && columnIndex == LOCATION
+    			&& sortedEquipment[rowIndex].getType() instanceof AmmoType) {
+    		sortedEquipment[rowIndex].setShotsLeft(Integer.parseInt((String)aValue));
+    	}
+    	fireTableDataChanged();
+	}
+
+	public Object getValueAt(int row, int col) {
         if (row < 0) {
             return "";
         }

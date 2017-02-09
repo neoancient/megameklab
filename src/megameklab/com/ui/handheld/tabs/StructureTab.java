@@ -584,6 +584,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
 
     public void addRefreshedListener(RefreshListener l) {
         refresh = l;
+        equipmentList.addTableModelListener(e -> refresh.refreshStatus());
     }
 
     @Override
