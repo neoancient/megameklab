@@ -42,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -774,10 +775,8 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             			.collect(Collectors.toList());
                 toRemove.forEach(m -> UnitUtil.removeMounted(getHandheld(), m));
             }
-            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } else if (e.getActionCommand().equals(REMOVEALL_COMMAND)) {
             removeAllEquipment();
-            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         }
         getHandheld().setNumHeatSinks(UnitUtil.getHandheldHeat(getHandheld()));
         fireTableRefresh();
@@ -937,9 +936,11 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
 	            }
         	}
         	success = true;
-        	addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } catch (LocationFullException lfe) {
-        	//should not happen, since we disable the add button when full.
+        	JOptionPane.showMessageDialog(null,
+        		    "Handheld weapons are limited to six component weapons.",
+        		    "No space",
+        		    JOptionPane.PLAIN_MESSAGE);
         }
         if (success) {
         	equipmentList.addCrit(mount);
