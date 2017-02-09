@@ -778,7 +778,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         } else if (e.getActionCommand().equals(REMOVEALL_COMMAND)) {
             removeAllEquipment();
         }
-        getHandheld().setNumHeatSinks(UnitUtil.getHandheldHeat(getHandheld()));
+        getHandheld().recalcHeat();
         fireTableRefresh();
         refresh.refreshAll();
     }
