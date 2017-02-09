@@ -2628,7 +2628,7 @@ public class UnitUtil {
     				&& isMechEquipment(eq, unit);
     	}
     	return eq instanceof MiscType
-    			&& (eq.hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER)
+    			&& ((eq.hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER) && !eq.hasFlag(MiscType.F_BA_EQUIPMENT))
     					|| eq.hasFlag(MiscType.F_ARTEMIS)
     					|| eq.hasFlag(MiscType.F_ARTEMIS_V)
     					|| eq.hasFlag(MiscType.F_APOLLO)
