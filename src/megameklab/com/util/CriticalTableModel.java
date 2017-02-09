@@ -159,7 +159,7 @@ public class CriticalTableModel extends AbstractTableModel {
                         crit.getBaseShotsLeft() / 1000;
             } else if ((unit instanceof HandheldWeapon)
             		&& (crit.getType() instanceof AmmoType)) {
-            	return ((double)crit.getBaseShotsLeft())
+            	return ((AmmoType)crit.getType()).getTonnage(unit) * crit.getBaseShotsLeft()
             			/ ((AmmoType)crit.getType()).getShots();
             } else if (crit.getType().hasFlag(MiscType.F_DETACHABLE_WEAPON_PACK)
                     && crit.getLinked() != null){
