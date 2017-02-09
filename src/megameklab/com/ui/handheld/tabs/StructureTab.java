@@ -28,6 +28,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -60,14 +63,21 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 import megamek.common.AmmoType;
-import megamek.common.Entity;
 import megamek.common.EquipmentType;
 import megamek.common.HandheldWeapon;
 import megamek.common.LocationFullException;
+import megamek.common.MiscType;
 import megamek.common.Mounted;
 import megamek.common.TechConstants;
 import megamek.common.WeaponType;
 import megamek.common.weapons.ArtilleryWeapon;
+import megamek.common.weapons.CLERPPC;
+import megamek.common.weapons.ISERPPC;
+import megamek.common.weapons.ISHeavyPPC;
+import megamek.common.weapons.ISLightPPC;
+import megamek.common.weapons.ISPPC;
+import megamek.common.weapons.ISSnubNosePPC;
+import megamek.common.weapons.PPCWeapon;
 import megameklab.com.ui.EntitySource;
 import megameklab.com.util.CriticalTableModel;
 import megameklab.com.util.EquipmentTableModel;
@@ -740,10 +750,29 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             addEquipment(equip);
         } else if (e.getActionCommand().equals(REMOVE_COMMAND)) {
             int selectedRows[] = equipmentTable.getSelectedRows();
-            for (Integer row : selectedRows){
-                equipmentList.removeMounted(row);
+            List<Mounted> toRemove = new ArrayList<>();
+            boolean removeFCS = false;
+            for (Integer row : selectedRows) {
+            	Mounted m = equipmentList.getCrits().get(row);
+            	toRemove.add(m);
+            	if (m.getLinkedBy() != null) {
+            		toRemove.add(m.getLinkedBy());
+            	}
+            	removeFCS |= m.getType() instanceof MiscType
+            			&& (m.getType().hasFlag(MiscType.F_ARTEMIS)
+            					|| m.getType().hasFlag(MiscType.F_ARTEMIS_V)
+            					|| m.getType().hasFlag(MiscType.F_APOLLO));
             }
-            equipmentList.removeCrits(selectedRows);
+            toRemove.forEach(m -> UnitUtil.removeMounted(getHandheld(), m));
+            if (removeFCS) {
+            	toRemove = getHandheld().getMisc().stream()
+            			.filter(m -> m.getType() instanceof MiscType
+            					&& (m.getType().hasFlag(MiscType.F_ARTEMIS)
+            							|| m.getType().hasFlag(MiscType.F_ARTEMIS_V)
+            							|| m.getType().hasFlag(MiscType.F_APOLLO)))
+            			.collect(Collectors.toList());
+                toRemove.forEach(m -> UnitUtil.removeMounted(getHandheld(), m));
+            }
             addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } else if (e.getActionCommand().equals(REMOVEALL_COMMAND)) {
             removeAllEquipment();
@@ -822,26 +851,103 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
     private void addEquipment(EquipmentType equip) {
         boolean success = false;
         Mounted mount = null;
+        List<Mounted> linkList = null;
+        Mounted toLink = null;
+        if (equip instanceof MiscType
+        		&& (equip.hasFlag(MiscType.F_ARTEMIS) || equip.hasFlag(MiscType.F_ARTEMIS_V))) {
+        	linkList = getHandheld().getWeaponList().stream()
+        			.filter(m -> ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_LRM
+            				|| ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_MML
+                    		|| ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_SRM
+                            || ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_NLRM
+                            || ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_LRM_TORPEDO
+                            || ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_SRM_TORPEDO
+                            || ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_LRM_TORPEDO_COMBO)
+        			.collect(Collectors.toList());
+        } else if (equip instanceof MiscType
+        		&& (equip.hasFlag(MiscType.F_APOLLO))) {
+        	linkList = getHandheld().getWeaponList().stream()
+        			.filter(m -> ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_MRM)
+        			.collect(Collectors.toList());
+        } else if (equip instanceof MiscType && equip.hasFlag(MiscType.F_PPC_CAPACITOR)) {
+        	for (Mounted m : getHandheld().getWeaponList()) {
+        		if (m.getType() instanceof PPCWeapon
+        				&& !TechConstants.isClan(equip.getTechLevel(getHandheld().getYear()))
+        				&& m.getLinkedBy() == null) {
+        			toLink = m;
+        		}
+        	}
+        } else if (equip instanceof MiscType && equip.hasFlag(MiscType.F_LASER_INSULATOR)) {
+        	for (Mounted m : getHandheld().getWeaponList()) {
+        		if (m.getType().hasFlag(WeaponType.F_LASER)
+        				&& m.getLinkedBy() == null) { 
+        			toLink = m;
+        		}
+        	}
+        } else if (equip instanceof MiscType && equip.hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE)) {
+        	for (Mounted m : getHandheld().getWeaponList()) {
+        		if (m.getType().hasFlag(WeaponType.F_LASER)
+        				&& !m.getType().hasFlag(WeaponType.F_PULSE)
+        				&& !TechConstants.isClan(equip.getTechLevel(getHandheld().getYear()))
+        				&& m.getLinkedBy() == null) {
+        			toLink = m;
+        		}
+        	}
+        }
         try {
-            mount = new Mounted(getHandheld(), equip);
-            int loc = Entity.LOC_NONE;
-            if (equip instanceof WeaponType) {
-            	loc = HandheldWeapon.LOC_GUNS;
-            }
-            getHandheld().addEquipment(mount, loc, false);
-            success = true;
-            addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
+        	if (linkList != null) {
+        		for (Mounted m : linkList) {
+        			mount = new Mounted(getHandheld(), equip);
+    	            getHandheld().addEquipment(mount, HandheldWeapon.LOC_GUNS, false);
+    	            m.setLinked(mount);
+        		}
+        	} else {
+	            mount = new Mounted(getHandheld(), equip);
+	            getHandheld().addEquipment(mount, HandheldWeapon.LOC_GUNS, false);
+	            if (toLink != null) {
+	            	mount.setLinked(toLink);
+	            } else if (equip instanceof WeaponType
+	            		&& (((WeaponType)equip).getAmmoType() == AmmoType.T_LRM
+	                    		|| ((WeaponType)equip).getAmmoType() == AmmoType.T_MML
+	                            || ((WeaponType)equip).getAmmoType() == AmmoType.T_SRM
+	                            || ((WeaponType)equip).getAmmoType() == AmmoType.T_NLRM
+	                            || ((WeaponType)equip).getAmmoType() == AmmoType.T_LRM_TORPEDO
+	                            || ((WeaponType)equip).getAmmoType() == AmmoType.T_SRM_TORPEDO
+	                            || ((WeaponType)equip).getAmmoType() == AmmoType.T_LRM_TORPEDO_COMBO)) {
+	            		Optional<Mounted> fcs = getHandheld().getMisc().stream()
+	            				.filter(m -> m.getType().hasFlag(MiscType.F_ARTEMIS)
+	            						|| m.getType().hasFlag(MiscType.F_ARTEMIS_V))
+	            				.findAny();
+	            		if (fcs.isPresent()) {
+	            			toLink = new Mounted(getHandheld(), fcs.get().getType());
+	            			getHandheld().addEquipment(toLink, HandheldWeapon.LOC_GUNS, false);
+	            			toLink.setLinked(mount);
+	            		}
+	            } else if (equip instanceof WeaponType
+	            		&& ((WeaponType)equip).getAmmoType() == AmmoType.T_MRM) {
+	            	Optional<Mounted> fcs = getHandheld().getMisc().stream()
+	            			.filter(m -> m.getType().hasFlag(MiscType.F_APOLLO))
+	            			.findAny();
+	            	if (fcs.isPresent()) {
+	            		toLink = new Mounted(getHandheld(), fcs.get().getType());
+	            		getHandheld().addEquipment(toLink, HandheldWeapon.LOC_GUNS, false);
+	            		toLink.setLinked(mount);
+	            	}
+	            }
+        	}
+        	success = true;
+        	addButton.setEnabled(getHandheld().getEmptyCriticals(HandheldWeapon.LOC_GUNS) > 0);
         } catch (LocationFullException lfe) {
         	//should not happen, since we disable the add button when full.
         }
         if (success) {
-            equipmentList.addCrit(mount);
+        	equipmentList.addCrit(mount);
         }
     }
 
     public void updateEquipment() {
-        equipmentList.removeAllCrits();
-        loadEquipmentTable();
+    	equipmentList.removeAllCrits();
+    	loadEquipmentTable();
     }
 
     public void removeAllEquipment() {
@@ -880,7 +986,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
                 if (!UnitUtil.isLegal(handheld, etype.getTechLevel(handheld.getTechLevelYear()))) {
                     return false;
                 }
-                if (((nType == T_OTHER) && UnitUtil.isHandheldEquipment(etype, handheld))
+                if (((nType == T_OTHER) && showMisc(etype))
                         || (((nType == T_WEAPON) && UnitUtil.isHandheldWeapon(etype, handheld)))
                         || ((nType == T_ENERGY) && UnitUtil.isHandheldWeapon(etype, handheld)
                             && (wtype != null) && (wtype.hasFlag(WeaponType.F_ENERGY)
@@ -954,6 +1060,82 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_TON), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_CRIT), true);
         }
+    }
+    
+    private boolean showMisc(EquipmentType eq) {
+    	if (!UnitUtil.isHandheldEquipment(eq, getHandheld())) {
+    		return false;
+    	}
+    	
+    	if (eq instanceof MiscType) {
+	    	//Only show Artemis IV or Artemis V if there is a qualifying missile system
+	    	//and it is not already installed
+	    	if (eq.hasFlag(MiscType.F_ARTEMIS) || eq.hasFlag(MiscType.F_ARTEMIS_V)) {
+	    		return getHandheld().getWeaponList().stream()
+	        			.mapToInt(m -> ((WeaponType)m.getType()).getAmmoType())
+	        			.anyMatch(at -> at == AmmoType.T_LRM
+	        						|| at == AmmoType.T_MML
+	        						|| at == AmmoType.T_SRM
+	        						|| at == AmmoType.T_NLRM
+	        						|| at == AmmoType.T_LRM_TORPEDO
+	        						|| at == AmmoType.T_SRM_TORPEDO
+	        						|| at == AmmoType.T_LRM_TORPEDO_COMBO)
+	        		&&
+	        			!getHandheld().getMisc().stream()
+	        				.anyMatch(m -> m.getType().hasFlag(MiscType.F_ARTEMIS)
+	        						|| m.getType().hasFlag(MiscType.F_ARTEMIS_V));
+	    	}
+	    	
+	    	//Show MRM FCS if there is a MRM system and Apollo is not already added.
+	    	if (eq.hasFlag(MiscType.F_APOLLO)) {
+	    		return getHandheld().getWeaponList().stream()
+	        			.mapToInt(m -> ((WeaponType)m.getType()).getAmmoType())
+	        			.anyMatch(at -> at == AmmoType.T_MRM)
+	        		&&
+	        			!getHandheld().getMisc().stream()
+	        				.anyMatch(m -> m.getType().hasFlag(MiscType.F_APOLLO));
+	    	}
+	    	
+	    	//Show if there is at least one qualifying PPC that does not already have a capacitor.
+	    	if (eq.hasFlag(MiscType.F_PPC_CAPACITOR)) {
+	    		return getHandheld().getWeaponList().stream()
+	        			.map(m -> m.getType())
+	        			.filter(wt -> wt instanceof ISPPC
+	        					|| wt instanceof ISLightPPC
+	        					|| wt instanceof ISHeavyPPC
+	        					|| wt instanceof ISERPPC
+	        					|| wt instanceof ISSnubNosePPC
+	        					|| (wt instanceof CLERPPC && getHandheld().getYear() >= 3101))
+	        			.count() >
+	    					getHandheld().getMisc().stream()
+	    						.filter(m -> m.getType().hasFlag(MiscType.F_PPC_CAPACITOR))
+	    						.count();
+	    	}
+	    	
+	    	//Show if there is at least one qualifying laser that does not already have an insulator.
+	    	if (eq.hasFlag(MiscType.F_LASER_INSULATOR)) {
+	    		return getHandheld().getWeaponList().stream()
+	        			.filter(m -> m.getType().hasFlag(WeaponType.F_LASER))
+	        			.count() >
+	    					getHandheld().getMisc().stream()
+	    						.filter(m -> m.getType().hasFlag(MiscType.F_LASER_INSULATOR))
+	    						.count();
+	    	}
+	    	
+	    	//Show if there is at least one qualifying laser that does not already have a pulse module.
+	    	if (eq.hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE)) {
+	    		return getHandheld().getWeaponList().stream()
+	        			.map(m -> m.getType())
+	        			.filter(wt -> wt.hasFlag(WeaponType.F_LASER)
+	        					&& !wt.hasFlag(WeaponType.F_PULSE)
+	        					&& !TechConstants.isClan(wt.getTechLevel(getHandheld().getYear())))
+	        			.count() >
+	    					getHandheld().getMisc().stream()
+	    						.filter(m -> m.getType().hasFlag(MiscType.F_RISC_LASER_PULSE_MODULE))
+	    						.count();
+	    	}
+    	}    	
+    	return true;
     }
 
     private class EnterAction extends AbstractAction {
