@@ -219,6 +219,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         basicPanel.add(createLabel("Source/Era:", labelSize), gbc);
         gbc.gridx = 1;
         basicPanel.add(source, gbc);
+        source.addKeyListener(this);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
