@@ -36,8 +36,10 @@
 	<property name="pkgbuilddir" value="${pkgdir}/${builddir}" />
 
 	<!-- gitroot used for git authentification -->
-	<property name="gitroot" value="https://github.com/MegaMek/megameklab.git" />
-	<property name="mm-gitroot" value="https://github.com/MegaMek/megamek.git" />
+	<property name="gitroot" value="https://github.com/neoancient/megameklab.git" />
+	<property name="mm-gitroot" value="https://github.com/neoancient/megamek.git" />
+	<property name="gitbranch" value="handheld_weapons" />
+	<property name="mm-gitbranch" value="handheld_weapons" />
 
 	<property name="timestampfile" value="${logdir}/timestamp" />
 
@@ -101,10 +103,10 @@
 	<!-- following pkgdir-* tasks get, build & package the current version from git -->
 	<target name="pkgdir-get" depends="pkgdir-init" description="get the latest source from git">
 		<exec executable="git">
-			<arg line="clone --single-branch ${gitroot} ${pkgdir}" />
+			<arg line="clone -b ${gitbranch} --single-branch ${gitroot} ${pkgdir}" />
 		</exec>
 		<exec executable="git">
-			<arg line="clone ${mm-gitroot} ${mm-pkgdir}" />
+			<arg line="clone -b ${mm-gitbranch} --single-branch ${mm-gitroot} ${mm-pkgdir}" />
 		</exec>
 		<copy todir="${pkgdir}/${datadir}/" encoding="UTF-8">
 			<fileset dir="${mm-pkgdir}/megamek/data">
