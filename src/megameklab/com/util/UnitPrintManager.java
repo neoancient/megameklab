@@ -47,6 +47,7 @@ import megamek.common.Entity;
 import megamek.common.EntityListFile;
 import megamek.common.EntityMovementMode;
 import megamek.common.FixedWingSupport;
+import megamek.common.HandheldWeapon;
 import megamek.common.Infantry;
 import megamek.common.LargeSupportTank;
 import megamek.common.Mech;
@@ -77,6 +78,7 @@ import megameklab.com.ui.Vehicle.Printing.PrintVTOL;
 import megameklab.com.ui.Vehicle.Printing.PrintVehicle;
 import megameklab.com.ui.Vehicle.Printing.PrintWiGE;
 import megameklab.com.ui.dialog.UnitPrintQueueDialog;
+import megameklab.com.ui.handheld.printing.PrintHandheld;
 
 public class UnitPrintManager {
 
@@ -152,6 +154,7 @@ public class UnitPrintManager {
         ArrayList<Tank> largeSupportTankList = new ArrayList<Tank>();
         ArrayList<SmallCraft> smallCraftAerodyneList = new ArrayList<SmallCraft>();
         ArrayList<SmallCraft> smallCraftSpheroidList = new ArrayList<SmallCraft>();
+        ArrayList<HandheldWeapon> handheldList = new ArrayList<HandheldWeapon>();
 
         for (Entity unit : loadedUnits) {
             if (unit instanceof QuadMech) {
@@ -177,6 +180,8 @@ public class UnitPrintManager {
                 wigeList.add((Tank) unit);
             } else if ((unit instanceof Tank) && ((unit.getMovementMode() == EntityMovementMode.NAVAL) || (unit.getMovementMode() == EntityMovementMode.SUBMARINE) || (unit.getMovementMode() == EntityMovementMode.HYDROFOIL))) {
                 navalList.add((Tank) unit);
+            } else if (unit instanceof HandheldWeapon) {
+            	handheldList.add((HandheldWeapon) unit);
             } else if (unit instanceof Tank) {
                 if (!((Tank) unit).hasNoDualTurret()) {
                     dualTurretList.add((Tank) unit);
@@ -327,6 +332,11 @@ public class UnitPrintManager {
         if (smallCraftSpheroidList.size() > 0) {
             PrintSmallCraftSpheroid sp = new PrintSmallCraftSpheroid(smallCraftSpheroidList, masterPrintJob);
             sp.print(aset);
+        }
+        
+        if (handheldList.size() > 0) {
+        	PrintHandheld sp = new PrintHandheld(handheldList, masterPrintJob);
+        	sp.print(aset);
         }
 
         return true;
