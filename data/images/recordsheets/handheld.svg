@@ -6104,40 +6104,130 @@
        id="text7379"><tspan
          x="0"
          y="0"
+         id="tspanBV_0"></tspan></text>
+         
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="5"
+         y="0"
+         id="tspanWpnQty_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"><tspan
+         x="13.96503"
+         y="0"
+         id="tspanWpnType_0_0"></tspan><tspan
+         x="79.60404"
+         y="0"
+         id="tspanWpnDmg_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="130"
+         y="0"
+         id="tspanWpnMin_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="148"
+         y="0"
+         id="tspanWpnSht_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="162"
+         y="0"
+         id="tspanWpnMed_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="178"
+         y="0"
+         id="tspanWpnLng_0_0"></tspan></text>
+
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="5"
+         y="8"
          sodipodi:role="line"
-         id="tspanBV_0">236</tspan><tspan
-         x="-519.49103"
-         y="21.504"
+         id="tspanWpnQty_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"><tspan
+         x="13.96503"
+         y="8"
+         id="tspanWpnType_0_1"></tspan><tspan
+         x="79.60404"
+         y="8"
+         id="tspanWpnDmg_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="130"
+         y="8"
+         id="tspanWpnMin_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="148"
+         y="8"
+         id="tspanWpnSht_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="162"
+         y="8"
+         id="tspanWpnMed_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="178"
+         y="8"
+         id="tspanWpnLng_0_1"></tspan></text>
+
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="5"
+         y="16"
+         id="tspanWpnQty_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"><tspan
+         x="13.96503"
+         y="16"
+         id="tspanWpnType_0_2"></tspan><tspan
+         x="79.60404"
+         y="16"
+         id="tspanWpnDmg_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="130"
+         y="16"
+         id="tspanWpnMin_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="148"
+         y="16"
+         id="tspanWpnSht_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="162"
+         y="16"
+         id="tspanWpnMed_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,29.78797,658.9064)"
+       style="font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"><tspan
+         x="178"
+         y="16"
          sodipodi:role="line"
-         id="tspanWpnQty_0_0">1</tspan><tspan
-         x="-505.526"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnType_0_0">LRM 20</tspan><tspan
-         x="-439.88699"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnDmg_0_0">1/Msl. [M,C,S]</tspan><tspan
-         x="-390.57199"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnMin_0_0">6</tspan><tspan
-         x="-373.89099"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnSht_0_0">7</tspan><tspan
-         x="-360.29001"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnMed_0_0">14</tspan><tspan
-         x="-344.30899"
-         y="21.504"
-         sodipodi:role="line"
-         id="tspanWpnLng_0_0">21</tspan><tspan
-         x="-519.49103 -427.88901 -425.74701 -419.02701 -416.647 -412.02701 -409.647 -405.27899"
-         y="29.504999"
-         sodipodi:role="line"
-         id="tspan7385"> [M,C,S]</tspan></text>
+         id="tspanWpnLng_0_2"></tspan></text>
+
 <text
        transform="matrix(0.9981,0,0,-1,28.7476,678.7503)"
        style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:9px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"

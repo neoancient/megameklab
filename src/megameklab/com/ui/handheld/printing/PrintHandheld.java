@@ -153,6 +153,7 @@ public class PrintHandheld implements Printable {
 						tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
 						((Text)tspan.getParent()).rebuild();
 					}
+					line++;
         		}
         		
         		tspan = (Tspan)diagram.getElement(ID_BV + "_" + pos);
