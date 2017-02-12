@@ -63,6 +63,7 @@ public class PrintHandheld implements Printable {
 	private final static String ID_WEAPON_LONG = "tspanWpnLng";
 	private final static String ID_ARMOR = "tspanArmor";
 	private final static String ID_ARMOR_PIPS = "gArmor";
+	private final static String ID_ARMOR_PIPS_DENSE = "gArmorDense";
 	private final static String ID_BV = "tspanBV";
 
     private HandheldWeapon handheld = null;
@@ -167,11 +168,15 @@ public class PrintHandheld implements Printable {
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
         		((Text)tspan.getParent()).rebuild();
         		
-        		for (int i = 0; i < 4; i++) {
-        			if (handheld.getTotalOArmor() > i * 8) {
-        				SVGElement group = diagram.getElement(ID_ARMOR_PIPS + "_" + pos + "_" + i);
-        				group.removeAttribute("display", AnimationElement.AT_XML);
-        			}
+        		String pipsId = ID_ARMOR_PIPS + "_" + pos + "_";
+        		int armorGroups = handheld.getTotalOArmor() / 8;
+        		if (armorGroups > 4) {
+        			pipsId = ID_ARMOR_PIPS_DENSE + "_" + pos + "_";
+        			armorGroups = Math.min(armorGroups, 8);
+        		}
+        		for (int i = 0; i < armorGroups; i++) {
+        			SVGElement group = diagram.getElement(pipsId + i);
+        			group.removeAttribute("display", AnimationElement.AT_XML);
         		}
         		
         		diagram.updateTime(0);
