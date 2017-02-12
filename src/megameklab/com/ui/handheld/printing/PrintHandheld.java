@@ -31,9 +31,11 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import com.kitfox.svg.SVGDiagram;
+import com.kitfox.svg.SVGElement;
 import com.kitfox.svg.SVGException;
 import com.kitfox.svg.Text;
 import com.kitfox.svg.Tspan;
+import com.kitfox.svg.animation.AnimationElement;
 
 import megamek.common.EquipmentType;
 import megamek.common.HandheldWeapon;
@@ -60,6 +62,7 @@ public class PrintHandheld implements Printable {
 	private final static String ID_WEAPON_MED = "tspanWpnMed";
 	private final static String ID_WEAPON_LONG = "tspanWpnLng";
 	private final static String ID_ARMOR = "tspanArmor";
+	private final static String ID_ARMOR_PIPS = "gArmor";
 	private final static String ID_BV = "tspanBV";
 
     private HandheldWeapon handheld = null;
@@ -159,6 +162,17 @@ public class PrintHandheld implements Printable {
         		tspan = (Tspan)diagram.getElement(ID_BV + "_" + pos);
         		tspan.setText(Integer.toString(handheld.calculateBattleValue()));
         		((Text)tspan.getParent()).rebuild();
+        		
+        		tspan = (Tspan)diagram.getElement(ID_ARMOR + "_" + pos);
+        		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
+        		((Text)tspan.getParent()).rebuild();
+        		
+        		for (int i = 0; i < 4; i++) {
+        			if (handheld.getTotalOArmor() > i * 8) {
+        				SVGElement group = diagram.getElement(ID_ARMOR_PIPS + "_" + pos + "_" + i);
+        				group.removeAttribute("display", AnimationElement.AT_XML);
+        			}
+        		}
         		
         		diagram.updateTime(0);
         		
