@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -37,6 +38,7 @@ import com.kitfox.svg.Text;
 import com.kitfox.svg.Tspan;
 import com.kitfox.svg.animation.AnimationElement;
 
+import megamek.common.AmmoType;
 import megamek.common.EquipmentType;
 import megamek.common.HandheldWeapon;
 import megamek.common.MiscType;
@@ -64,6 +66,9 @@ public class PrintHandheld implements Printable {
 	private final static String ID_ARMOR = "tspanArmor";
 	private final static String ID_ARMOR_PIPS = "gArmor";
 	private final static String ID_ARMOR_PIPS_DENSE = "gArmorDense";
+	private final static String ID_AMMO_PIP = "pipAmmo";
+	private final static String ID_AMMO_PIP_SPARSE = "pipAmmoSparse";
+	private final static String ID_AMMO_PIP_DENSE = "pipAmmoDense";
 	private final static String ID_BV = "tspanBV";
 
     private HandheldWeapon handheld = null;
@@ -160,6 +165,28 @@ public class PrintHandheld implements Printable {
 					line++;
         		}
         		
+        		//Collect all ammo by type, sorting with the type with the most shots first.
+        		Map<Integer,Integer> ammoByType = new TreeMap<>((i1, i2) -> i2.compareTo(i1));
+        		for (Mounted m : handheld.getAmmo()) {
+        			ammoByType.merge(((AmmoType)m.getType()).getAmmoType(),
+        					m.getBaseShotsLeft(), Integer::sum);
+        		}
+        		
+        		line = 0;
+        		for (Integer at : ammoByType.keySet()) {
+        			if (ammoByType.get(at) <= 10 && ammoByType.size() == 1) {
+        				for (int i = 0; i < ammoByType.get(at); i++) {
+        					SVGElement pip = diagram.getElement(ID_AMMO_PIP_SPARSE + "_" + pos + "_" + i);
+        					pip.removeAttribute("display", AnimationElement.AT_XML);
+        				}
+        			} else if (ammoByType.get(at) <= 40) {
+        				for (int i = 0; i < ammoByType.get(at); i++) {
+        					SVGElement pip = diagram.getElement(ID_AMMO_PIP + "_" + pos + "_" + i);
+        					pip.removeAttribute("display", AnimationElement.AT_XML);
+        				}
+        			}
+        		}
+
         		tspan = (Tspan)diagram.getElement(ID_BV + "_" + pos);
         		tspan.setText(Integer.toString(handheld.calculateBattleValue()));
         		((Text)tspan.getParent()).rebuild();
