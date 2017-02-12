@@ -13,8 +13,10 @@
  */
 package megameklab.com.ui.handheld.printing;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
@@ -64,8 +66,6 @@ public class PrintHandheld implements Printable {
 	private final static String ID_WEAPON_MED = "tspanWpnMed";
 	private final static String ID_WEAPON_LONG = "tspanWpnLng";
 	private final static String ID_ARMOR = "tspanArmor";
-	private final static String ID_ARMOR_PIPS = "gArmor";
-	private final static String ID_ARMOR_PIPS_DENSE = "gArmorDense";
 	private final static String ID_AMMO_PIP = "pipAmmo";
 	private final static String ID_AMMO_PIP_SPARSE = "pipAmmoSparse";
 	private final static String ID_AMMO_PIP_DENSE = "pipAmmoDense";
@@ -194,21 +194,12 @@ public class PrintHandheld implements Printable {
         		tspan = (Tspan)diagram.getElement(ID_ARMOR + "_" + pos);
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
         		((Text)tspan.getParent()).rebuild();
-        		
-        		String pipsId = ID_ARMOR_PIPS + "_" + pos + "_";
-        		int armorGroups = handheld.getTotalOArmor() / 8;
-        		if (armorGroups > 4) {
-        			pipsId = ID_ARMOR_PIPS_DENSE + "_" + pos + "_";
-        			armorGroups = Math.min(armorGroups, 8);
-        		}
-        		for (int i = 0; i < armorGroups; i++) {
-        			SVGElement group = diagram.getElement(pipsId + i);
-        			group.removeAttribute("display", AnimationElement.AT_XML);
-        		}
-        		
+
         		diagram.updateTime(0);
         		
             	diagram.render(g2d);
+            	
+            	printArmor(g2d, handheld.getTotalOArmor());
         	}
         } catch (SVGException ex) {
         	ex.printStackTrace();
@@ -216,7 +207,38 @@ public class PrintHandheld implements Printable {
 
         g2d.scale(pageFormat.getImageableWidth(), pageFormat.getImageableHeight());
     }
-
+	
+	private void printArmor(Graphics2D g2d, int armor) {
+		double offsetX = 20;
+		double offsetY = 10;
+		double startX = 280;
+		double startY = 110;
+		double xEnd = startX + offsetX * 8;
+		
+		g2d.setPaint(Color.BLACK);
+		
+		if (armor > 32) {
+			offsetX = 10;
+			offsetY = 8.66;
+		}
+		
+		double x = startX;
+		double y = startY;
+		boolean indent = false;
+		for (int a = 0; a < Math.min(64, armor); a++) {
+			g2d.draw(new Ellipse2D.Double(x, y, 7.394, 7.394));
+			x += offsetX;
+			if (x >= xEnd) {
+				y += offsetY;
+				x = startX;
+				indent = !indent;
+				if (indent) {
+					x += offsetX * 0.5;
+				}
+			}
+		}
+	}
+	
 	public void print(HashPrintRequestAttributeSet aset) {
 
         try {
