@@ -82,6 +82,7 @@ public class MainUI extends MegaMekLabMainUI {
         previewTab = new PreviewTab(this);
 
         structureTab.addRefreshedListener(this);
+        statusbar.addRefreshedListener(this);
 
         ConfigPane.addTab("Build", structureTab);
         ConfigPane.addTab("Preview", previewTab);

@@ -16,6 +16,8 @@ package megameklab.com.ui.handheld.printing;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -111,8 +113,13 @@ public class PrintHandheld implements Printable {
         	Tspan tspan = (Tspan)diagram.getElement("tspanCopyright");
         	tspan.setText(String.format(tspan.getText(), Calendar.getInstance().get(Calendar.YEAR)));
         	((Text)tspan.getParent()).rebuild();
+        	
             diagram.render(g2d);
 
+            if (handheldList.get(currentPosition).getFluff().getMMLImagePath() != null) {
+            	printFluffImage(g2d);
+            }
+        	
             for (int pos = 0; pos < stop; pos++) {
             	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
@@ -268,7 +275,7 @@ public class PrintHandheld implements Printable {
         } catch (SVGException ex) {
         	ex.printStackTrace();
         }
-
+        
         g2d.scale(pageFormat.getImageableWidth(), pageFormat.getImageableHeight());
     }
 	
@@ -327,7 +334,18 @@ public class PrintHandheld implements Printable {
 		}
 	}
 	
-	public void print(HashPrintRequestAttributeSet aset) {
+    private void printFluffImage(Graphics2D g2d) {
+        Image img = ImageHelper.getFluffImage(handheld, ImageHelper.imageMech);
+        int width = img.getWidth(null);
+        int height = img.getHeight(null);
+        double scale = Math.min(48.0 / width, 48.0 / height);
+        int	drawingX = 440 - (width / 2);
+        int drawingY = 48 - (height / 2);
+        AffineTransform xform = new AffineTransform(scale, 0, 0, scale, drawingX, drawingY);
+        g2d.drawImage(img, xform, null);
+    }
+
+    public void print(HashPrintRequestAttributeSet aset) {
 
         try {
             for (; currentPosition < handheldList.size(); currentPosition += 8) {
