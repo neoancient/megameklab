@@ -6258,12 +6258,49 @@
          x="14.581"
          y="0">Type</tspan></text>
 <text
-       transform="matrix(1,0,0,-1,480,680.1658)"
-       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none" text-anchor="middle"
+       transform="matrix(1,0,0,-1,468,680.1658)"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan>Ammo:</tspan></text>
+<text
+       transform="matrix(1,0,0,-1,459,674.707)"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="text7401"><tspan
-         x="0"
-         y="0"
-         id="tspanAmmoType_0_0">Ammo:</tspan></text>
+         id="tspanAmmoType_0_0"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,665.36)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_1"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,660.67)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_2"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,656)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_3"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,651.34)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_4"></tspan></text>
+<text
+       transform="matrix(1,0,4,-1,460,646.67)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_5"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,642)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_6"></tspan></text>
+<text
+       transform="matrix(1,0,0,-1,460,637.2)" display="none"
+       style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+       id="text7401"><tspan
+         id="tspanAmmoType_0_7"></tspan></text>
 
 <text
        transform="matrix(1,0,0,-1,468.6793,680.1658)"

@@ -34,7 +34,6 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.standard.PrintQuality;
 
 import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGElement;
 import com.kitfox.svg.SVGException;
 import com.kitfox.svg.Text;
 import com.kitfox.svg.Tspan;
@@ -66,12 +65,14 @@ public class PrintHandheld implements Printable {
 	private final static String ID_WEAPON_MED = "tspanWpnMed";
 	private final static String ID_WEAPON_LONG = "tspanWpnLng";
 	private final static String ID_ARMOR = "tspanArmor";
-	private final static String ID_AMMO_PIP = "pipAmmo";
-	private final static String ID_AMMO_PIP_SPARSE = "pipAmmoSparse";
-	private final static String ID_AMMO_PIP_DENSE = "pipAmmoDense";
+	private final static String ID_AMMO_TYPE = "tspanAmmoType";
 	private final static String ID_BV = "tspanBV";
 
-    private HandheldWeapon handheld = null;
+	private final static int AMMO_LINE 			= 0;
+	private final static int AMMO_LINE_SPARSE 	= 1;
+	private final static int AMMO_LINE_DENSE 	= 2;
+	
+	private HandheldWeapon handheld = null;
     private ArrayList<HandheldWeapon> handheldList;
     PrinterJob masterPrintJob;
     private int currentPosition;
@@ -165,28 +166,6 @@ public class PrintHandheld implements Printable {
 					line++;
         		}
         		
-        		//Collect all ammo by type, sorting with the type with the most shots first.
-        		Map<Integer,Integer> ammoByType = new TreeMap<>((i1, i2) -> i2.compareTo(i1));
-        		for (Mounted m : handheld.getAmmo()) {
-        			ammoByType.merge(((AmmoType)m.getType()).getAmmoType(),
-        					m.getBaseShotsLeft(), Integer::sum);
-        		}
-        		
-        		line = 0;
-        		for (Integer at : ammoByType.keySet()) {
-        			if (ammoByType.get(at) <= 10 && ammoByType.size() == 1) {
-        				for (int i = 0; i < ammoByType.get(at); i++) {
-        					SVGElement pip = diagram.getElement(ID_AMMO_PIP_SPARSE + "_" + pos + "_" + i);
-        					pip.removeAttribute("display", AnimationElement.AT_XML);
-        				}
-        			} else if (ammoByType.get(at) <= 40) {
-        				for (int i = 0; i < ammoByType.get(at); i++) {
-        					SVGElement pip = diagram.getElement(ID_AMMO_PIP + "_" + pos + "_" + i);
-        					pip.removeAttribute("display", AnimationElement.AT_XML);
-        				}
-        			}
-        		}
-
         		tspan = (Tspan)diagram.getElement(ID_BV + "_" + pos);
         		tspan.setText(Integer.toString(handheld.calculateBattleValue()));
         		((Text)tspan.getParent()).rebuild();
@@ -195,12 +174,68 @@ public class PrintHandheld implements Printable {
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
         		((Text)tspan.getParent()).rebuild();
 
+        		//Collect all ammo by type, sorting with the type shortest name first (since
+        		//it has the least space to print).
+        		Map<AmmoType,Integer> ammoByType = new TreeMap<>((i1, i2) ->
+        			i1.getShortName().length() - i2.getShortName().length());
+        		for (Mounted m : handheld.getAmmo()) {
+        			ammoByType.merge((AmmoType)m.getType(),
+        					m.getBaseShotsLeft(), Integer::sum);
+        		}
+        		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
+        		
+        		if (ammoByType.size() > 1) {
+        			line = 0;
+        			for (AmmoType at : ammoByType.keySet()) {
+        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + pos + "_" + line);
+        	            	tspan.setText(at.getShortName());
+        	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
+        	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
+        	            }
+        	            ((Text)tspan.getParent()).rebuild();
+        	            if (totalShots > 30) {
+        	            	line += (int)Math.ceil(Math.min(100, ammoByType.get(at)) / 20.0) + 1;
+        	            } else {
+        	            	line += (int)Math.ceil(ammoByType.get(at) / 10.0) * 2 + 1;
+        	            }
+        			}
+        		}
+
         		diagram.updateTime(0);
         		
             	diagram.render(g2d);
             	
             	printArmor(g2d, handheld.getTotalOArmor());
-        	}
+
+        		line = 0;
+        		for (AmmoType at : ammoByType.keySet()) {
+        			int shots = Math.min(100, ammoByType.get(at));
+        			if (shots <= 10 && ammoByType.size() == 1) {
+        				printAmmoLine(g2d, AMMO_LINE_SPARSE, ammoByType.get(at), line);
+        				line += 2;
+        			} else if (totalShots <= 40) {
+        				for (int i = 0; i < shots / 10; i++) {
+            				printAmmoLine(g2d, AMMO_LINE, 10, line);
+            				line += 2;
+        				}
+        				if (shots % 10 > 0) {
+            				printAmmoLine(g2d, AMMO_LINE, shots % 10, line);
+            				line += 2;
+        				}
+        			} else {
+        				for (int i = 0; i < shots / 20; i++) {
+            				printAmmoLine(g2d, AMMO_LINE_DENSE, 20, line);
+            				line += 1;
+        				}
+        				if (shots % 20 > 0) {
+            				printAmmoLine(g2d, AMMO_LINE_DENSE, shots % 20, line);
+            				line += 1;
+        				}
+        			}
+        			line += 2;
+        		}
+
+            }
         } catch (SVGException ex) {
         	ex.printStackTrace();
         }
@@ -236,6 +271,30 @@ public class PrintHandheld implements Printable {
 					x += offsetX * 0.5;
 				}
 			}
+		}
+	}
+	
+	private void printAmmoLine(Graphics2D g2d, int lineType, int ammo, int line) {
+		double startX = 458;
+		double startY = 110;
+		double size = 7.394;
+		
+		double offsetX = 10.832;
+		double offsetY = 4.6724;
+		
+		if (lineType == AMMO_LINE_SPARSE) {
+			offsetX = 24.372;
+		} else if (lineType == AMMO_LINE_DENSE) {
+			offsetX = 5.5;
+			size = 3.698;
+		}
+		
+		double x = startX;
+		double y = startY + offsetY * line;
+		g2d.setPaint(Color.BLACK);
+		for (int i = 0; i < Math.min(50, ammo); i++) {
+			g2d.draw(new Ellipse2D.Double(x, y, size, size));
+			x += offsetX;
 		}
 	}
 	
