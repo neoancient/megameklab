@@ -184,7 +184,50 @@ public class PrintHandheld implements Printable {
         					m.getBaseShotsLeft(), Integer::sum);
         		}
         		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
+
+        		int[] pips = new int[8];
+        		int[] sparsePips = new int[8];
+        		int[] densePips = new int[8];
         		
+        		line = 0;
+        		for (AmmoType at : ammoByType.keySet()) {
+        			if (ammoByType.size() > 1) {
+        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
+        				tspan.setText(at.getShortName());
+        				((Text)tspan.getParent()).rebuild();
+        				if (line > 0) {
+        					line += 2;
+        				}
+        			}
+        			int shots = Math.min(100, ammoByType.get(at));
+        			if (shots <= 10 && ammoByType.size() == 1) {
+        				sparsePips[line] = Math.min(shots, 5);
+        				line += 2;
+        				if (shots > 5) {
+            				sparsePips[line] = shots - 5;
+            				line += 2;
+        				}
+        			} else if (totalShots <= 40) {
+        				for (int i = 0; i < shots / 10; i++) {
+        					pips[line] = 10;
+            				line += 2;
+        				}
+        				if (shots % 10 > 0) {
+            				pips[line] = shots % 10;
+            				line += 2;
+        				}
+        			} else {
+        				for (int i = 0; i < shots / 20; i++) {
+        					densePips[line] = 20;
+        					line++;
+        				}
+        				if (shots % 20 > 0) {
+            				densePips[line] = shots % 20;
+            				line++;
+        				}
+        			}
+        		}
+
         		if (ammoByType.size() > 1) {
         			line = 0;
         			for (AmmoType at : ammoByType.keySet()) {
@@ -207,34 +250,19 @@ public class PrintHandheld implements Printable {
             	diagram.render(g2d);
             	
             	printArmor(g2d, handheld.getTotalOArmor());
+            	
+            	for (int i = 0; i < 8; i++) {
+            		if (pips[i] > 0) {
+            			printAmmoLine(g2d, AMMO_LINE, pips[i], i);
+            		}
+            		if (sparsePips[i] > 0) {
+            			printAmmoLine(g2d, AMMO_LINE_SPARSE, sparsePips[i], i);
+            		}
+            		if (densePips[i] > 0) {
+            			printAmmoLine(g2d, AMMO_LINE_DENSE, densePips[i], i);
+            		}
+            	}
 
-        		line = 0;
-        		for (AmmoType at : ammoByType.keySet()) {
-        			int shots = Math.min(100, ammoByType.get(at));
-        			if (shots <= 10 && ammoByType.size() == 1) {
-        				printAmmoLine(g2d, AMMO_LINE_SPARSE, ammoByType.get(at), line);
-        				line += 2;
-        			} else if (totalShots <= 40) {
-        				for (int i = 0; i < shots / 10; i++) {
-            				printAmmoLine(g2d, AMMO_LINE, 10, line);
-            				line += 2;
-        				}
-        				if (shots % 10 > 0) {
-            				printAmmoLine(g2d, AMMO_LINE, shots % 10, line);
-            				line += 2;
-        				}
-        			} else {
-        				for (int i = 0; i < shots / 20; i++) {
-            				printAmmoLine(g2d, AMMO_LINE_DENSE, 20, line);
-            				line += 1;
-        				}
-        				if (shots % 20 > 0) {
-            				printAmmoLine(g2d, AMMO_LINE_DENSE, shots % 20, line);
-            				line += 1;
-        				}
-        			}
-        			line += 2;
-        		}
         		g2d.translate(0, 74);
             }
         } catch (SVGException ex) {
