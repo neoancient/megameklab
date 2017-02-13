@@ -55,9 +55,10 @@ import megameklab.com.util.StringUtils;
  *
  */
 public class PrintHandheld implements Printable {
+
+	private final static int VERTICAL_MARGIN = 74;
 	
 	/* Id tags of elements in the SVG file */
-//	private final static String ID_FLUFF_IMAGE = "imageFluff";
 	private final static String ID_WEAPON_NAME = "tspanWeaponName";
 	private final static String ID_WEAPON_QTY = "tspanWpnQty";
 	private final static String ID_WEAPON_TYPE = "tspanWpnType";
@@ -120,7 +121,13 @@ public class PrintHandheld implements Printable {
             	printFluffImage(g2d);
             }
         	
-            for (int pos = 0; pos < stop; pos++) {
+            for (int pos = 0; pos < 9; pos++) {
+            	if (pos >= stop) {
+                	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon_Blank.svg"));
+                	diagram.render(g2d);
+                	g2d.translate(0, VERTICAL_MARGIN);
+                	continue;
+            	}
             	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
         		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME);
@@ -270,7 +277,7 @@ public class PrintHandheld implements Printable {
             		}
             	}
 
-        		g2d.translate(0, 74);
+        		g2d.translate(0, VERTICAL_MARGIN);
             }
         } catch (SVGException ex) {
         	ex.printStackTrace();
