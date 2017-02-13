@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-TAG Weapon
+Medium Chemical Laser
 </Name>
 
 <Model>
@@ -45,14 +45,20 @@ None
 </armor>
 
 <GUNS Equipment>
-CLTAG
+CLMediumChemLaser
+CLMediumChemLaser
+CLMediumChemLaserAmmo:Shots15#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-1.5
+3.0
 </tonnage>
 

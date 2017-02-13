@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Heavy Thunderbolt Weapon
+Heavy LB-X
 </Name>
 
 <Model>
@@ -41,13 +41,17 @@ None
 </internal_type>
 
 <armor>
-32
+8
 </armor>
 
 <GUNS Equipment>
-Thunderbolt 10
-IS Ammo Thunderbolt-10:Shots18#
+ISLBXAC10
+IS LB 10-X Cluster Ammo:Shots5#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Quickdraw QKD-8P.png
+</imagepath>
 
 <source>
 RS:Prototypes

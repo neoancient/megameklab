@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Heavy Streak Weapon
+AP Gauss
 </Name>
 
 <Model>
@@ -21,11 +21,11 @@ Heavy Streak Weapon
 </Model>
 
 <year>
-3084
+3085
 </year>
 
 <type>
-IS Level 3
+Clan Level 3
 </type>
 
 <motion_type>
@@ -41,21 +41,25 @@ None
 </internal_type>
 
 <armor>
-32
+8
 </armor>
 
 <GUNS Equipment>
-ISStreakSRM4
-ISStreakSRM4
-ISStreakSRM4
-IS Streak SRM 4 Ammo:Shots25#
+CLAPGaussRifle
+CLAPGaussRifle
+CLAPGaussRifle
+CLAPGaussRifle Ammo:Shots40#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-12.0
+3.0
 </tonnage>
 

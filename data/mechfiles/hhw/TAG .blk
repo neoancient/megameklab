@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Light Laser Weapon
+TAG
 </Name>
 
 <Model>
@@ -21,11 +21,11 @@ Light Laser Weapon
 </Model>
 
 <year>
-3084
+3085
 </year>
 
 <type>
-IS Level 3
+Clan Level 3
 </type>
 
 <motion_type>
@@ -41,18 +41,22 @@ None
 </internal_type>
 
 <armor>
-32
+8
 </armor>
 
 <GUNS Equipment>
-Medium Laser
+CLTAG
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-6.0
+1.5
 </tonnage>
 

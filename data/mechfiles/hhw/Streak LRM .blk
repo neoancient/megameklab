@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Medium Chemical Laser Weapon
+Streak LRM
 </Name>
 
 <Model>
@@ -45,10 +45,13 @@ None
 </armor>
 
 <GUNS Equipment>
-CLMediumChemLaser
-CLMediumChemLaser
-CLMediumChemLaserAmmo:Shots15#
+CLStreakLRM5
+Clan Streak LRM 5 Ammo:Shots12#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes

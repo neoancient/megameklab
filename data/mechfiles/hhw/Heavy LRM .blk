@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Heavy LB-X Weapon
+Heavy LRM
 </Name>
 
 <Model>
@@ -41,13 +41,17 @@ None
 </internal_type>
 
 <armor>
-8
+16
 </armor>
 
 <GUNS Equipment>
-ISLBXAC10
-IS LB 10-X Cluster Ammo:Shots5#
+LRM 20
+IS Ammo LRM-20:Shots6#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Quickdraw QKD-8P.png
+</imagepath>
 
 <source>
 RS:Prototypes

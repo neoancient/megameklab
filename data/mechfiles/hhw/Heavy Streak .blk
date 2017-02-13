@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Streak LRM Weapon
+Heavy Streak
 </Name>
 
 <Model>
@@ -21,11 +21,11 @@ Streak LRM Weapon
 </Model>
 
 <year>
-3085
+3084
 </year>
 
 <type>
-Clan Level 3
+IS Level 3
 </type>
 
 <motion_type>
@@ -41,19 +41,25 @@ None
 </internal_type>
 
 <armor>
-8
+32
 </armor>
 
 <GUNS Equipment>
-CLStreakLRM5
-Clan Streak LRM 5 Ammo:Shots12#
+ISStreakSRM4
+ISStreakSRM4
+ISStreakSRM4
+IS Streak SRM 4 Ammo:Shots25#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Quickdraw QKD-8P.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-3.0
+12.0
 </tonnage>
 

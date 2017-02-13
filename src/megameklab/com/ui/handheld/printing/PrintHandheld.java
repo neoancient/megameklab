@@ -131,7 +131,7 @@ public class PrintHandheld implements Printable {
             	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
         		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME);
-        		tspan.setText(handheld.getShortName());
+        		tspan.setText(handheld.getShortName() + " Weapon");
         		((Text)tspan.getParent()).rebuild();
         		
         		tspan = (Tspan)diagram.getElement(ID_ARMOR);

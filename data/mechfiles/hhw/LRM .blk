@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-LRM Weapon
+LRM
 </Name>
 
 <Model>
@@ -49,6 +49,10 @@ CLLRM5
 CLLRM5
 Clan Ammo LRM-5:Shots12#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes

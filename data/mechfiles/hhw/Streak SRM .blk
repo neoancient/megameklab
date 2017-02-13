@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Machine Gun Weapon
+Streak SRM
 </Name>
 
 <Model>
@@ -45,18 +45,19 @@ None
 </armor>
 
 <GUNS Equipment>
-CLMG
-CLMG
-CLMG
-CLMG
-Clan Machine Gun Ammo - Half:Shots100#
+CLStreakSRM4
+Clan Streak SRM 4 Ammo:Shots12#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Incubus II.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-2.0
+3.0
 </tonnage>
 

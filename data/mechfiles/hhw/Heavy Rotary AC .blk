@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-AP Gauss Weapon
+Heavy Rotary AC
 </Name>
 
 <Model>
@@ -21,11 +21,11 @@ AP Gauss Weapon
 </Model>
 
 <year>
-3085
+3084
 </year>
 
 <type>
-Clan Level 3
+IS Level 3
 </type>
 
 <motion_type>
@@ -45,17 +45,19 @@ None
 </armor>
 
 <GUNS Equipment>
-CLAPGaussRifle
-CLAPGaussRifle
-CLAPGaussRifle
-CLAPGaussRifle Ammo:Shots40#
+ISRotaryAC5
+ISRotaryAC5 Ammo:Shots30#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Quickdraw QKD-8P.png
+</imagepath>
 
 <source>
 RS:Prototypes
 </source>
 
 <tonnage>
-3.0
+12.0
 </tonnage>
 

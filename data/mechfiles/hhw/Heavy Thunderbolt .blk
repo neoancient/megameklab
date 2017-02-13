@@ -13,7 +13,7 @@ HandheldWeapon
 </UnitType>
 
 <Name>
-Heavy Rotary AC Weapon
+Heavy Thunderbolt
 </Name>
 
 <Model>
@@ -41,13 +41,17 @@ None
 </internal_type>
 
 <armor>
-8
+32
 </armor>
 
 <GUNS Equipment>
-ISRotaryAC5
-ISRotaryAC5 Ammo:Shots30#
+Thunderbolt 10
+IS Ammo Thunderbolt-10:Shots18#
 </GUNS Equipment>
+
+<imagepath>
+./data/images/fluff/mech/Quickdraw QKD-8P.png
+</imagepath>
 
 <source>
 RS:Prototypes
