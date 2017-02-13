@@ -105,7 +105,7 @@ public class PrintHandheld implements Printable {
         SVGDiagram diagram;
         
         int stop = Math.min(9, handheldList.size() - currentPosition);
-		diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/handheld.svg"));
+		diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Sheet.svg"));
 
         try {
         	Tspan tspan = (Tspan)diagram.getElement("tspanCopyright");
@@ -114,12 +114,13 @@ public class PrintHandheld implements Printable {
             diagram.render(g2d);
 
             for (int pos = 0; pos < stop; pos++) {
+            	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
-        		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME + "_" + pos);
+        		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME);
         		tspan.setText(handheld.getShortName());
         		((Text)tspan.getParent()).rebuild();
         		
-        		tspan = (Tspan)diagram.getElement(ID_ARMOR + "_" + pos);
+        		tspan = (Tspan)diagram.getElement(ID_ARMOR);
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
 
         		Map<String,List<Mounted>> weapons = handheld.getEquipment().stream()
@@ -130,20 +131,20 @@ public class PrintHandheld implements Printable {
         		int line = 0;
         		for (String name : weapons.keySet()) {
         			EquipmentType eq = EquipmentType.get(name);
-					tspan = (Tspan)diagram.getElement(ID_WEAPON_QTY + "_" + pos + "_" + line);
+					tspan = (Tspan)diagram.getElement(ID_WEAPON_QTY + "_" + line);
 					tspan.setText(Integer.toString(weapons.get(name).size()));
 					((Text)tspan.getParent()).rebuild();
 					
-					tspan = (Tspan)diagram.getElement(ID_WEAPON_TYPE + "_" + pos + "_" + line);
+					tspan = (Tspan)diagram.getElement(ID_WEAPON_TYPE + "_" + line);
 					tspan.setText(eq.getName());
 					((Text)tspan.getParent()).rebuild();
 					
 					if (eq instanceof WeaponType) {
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + pos + "_" + line);
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + line);
 						tspan.setText(StringUtils.getEquipmentInfo(handheld, weapons.get(name).get(0)));
 						((Text)tspan.getParent()).rebuild();
 						
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + pos + "_" + line);
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + line);
 						if (((WeaponType)eq).getMinimumRange() > 0) {
 							tspan.setText(Integer.toString(((WeaponType)eq).getMinimumRange()));
 						} else {
@@ -151,26 +152,26 @@ public class PrintHandheld implements Printable {
 						}
 						((Text)tspan.getParent()).rebuild();
 
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + pos + "_" + line);
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + line);
 						tspan.setText(Integer.toString(((WeaponType)eq).getShortRange()));
 						((Text)tspan.getParent()).rebuild();
 
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + pos + "_" + line);
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + line);
 						tspan.setText(Integer.toString(((WeaponType)eq).getMediumRange()));
 						((Text)tspan.getParent()).rebuild();
 
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + pos + "_" + line);
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + line);
 						tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
 						((Text)tspan.getParent()).rebuild();
 					}
 					line++;
         		}
         		
-        		tspan = (Tspan)diagram.getElement(ID_BV + "_" + pos);
+        		tspan = (Tspan)diagram.getElement(ID_BV);
         		tspan.setText(Integer.toString(handheld.calculateBattleValue()));
         		((Text)tspan.getParent()).rebuild();
         		
-        		tspan = (Tspan)diagram.getElement(ID_ARMOR + "_" + pos);
+        		tspan = (Tspan)diagram.getElement(ID_ARMOR);
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
         		((Text)tspan.getParent()).rebuild();
 
@@ -187,7 +188,7 @@ public class PrintHandheld implements Printable {
         		if (ammoByType.size() > 1) {
         			line = 0;
         			for (AmmoType at : ammoByType.keySet()) {
-        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + pos + "_" + line);
+        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
         	            	tspan.setText(at.getShortName());
         	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
         	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
@@ -234,7 +235,7 @@ public class PrintHandheld implements Printable {
         			}
         			line += 2;
         		}
-
+        		g2d.translate(0, 74);
             }
         } catch (SVGException ex) {
         	ex.printStackTrace();
