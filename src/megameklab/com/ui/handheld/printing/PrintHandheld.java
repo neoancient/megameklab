@@ -200,6 +200,10 @@ public class PrintHandheld implements Printable {
         					m.getBaseShotsLeft(), Integer::sum);
         		}
         		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
+        		int maxPerAmmoType = 160;
+        		if (ammoByType.size() > 1) {
+        			maxPerAmmoType = 100;
+        		}
 
         		int[] pips = new int[8];
         		int[] sparsePips = new int[8];
@@ -215,7 +219,7 @@ public class PrintHandheld implements Printable {
         					line += 2;
         				}
         			}
-        			int shots = Math.min(100, ammoByType.get(at));
+        			int shots = Math.min(maxPerAmmoType, ammoByType.get(at));
         			if (shots <= 10 && ammoByType.size() == 1) {
         				sparsePips[line] = Math.min(shots, 5);
         				line += 2;
