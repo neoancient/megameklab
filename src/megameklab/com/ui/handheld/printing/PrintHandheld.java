@@ -25,6 +25,7 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -131,7 +132,8 @@ public class PrintHandheld implements Printable {
             	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
         		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME);
-        		tspan.setText(handheld.getShortName() + " Weapon");
+        		tspan.setText(handheld.getShortName() + " Weapon ("
+        				+ new DecimalFormat("0.#").format(handheld.getWeight()) + " tons)");
         		((Text)tspan.getParent()).rebuild();
         		
         		tspan = (Tspan)diagram.getElement(ID_ARMOR);
