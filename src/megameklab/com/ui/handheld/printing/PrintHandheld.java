@@ -248,22 +248,20 @@ public class PrintHandheld implements Printable {
         			}
         		}
 
-        		if (ammoByType.size() > 1) {
-        			line = 0;
-        			for (AmmoType at : ammoByType.keySet()) {
-        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
-        	            	tspan.setText(at.getShortName());
-        	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
-        	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
-        	            }
-        	            ((Text)tspan.getParent()).rebuild();
-        	            if (totalShots > 30) {
-        	            	line += (int)Math.ceil(Math.min(100, ammoByType.get(at)) / 20.0) + 1;
-        	            } else {
-        	            	line += (int)Math.ceil(ammoByType.get(at) / 10.0) * 2 + 1;
-        	            }
-        			}
-        		}
+    			line = 0;
+    			for (AmmoType at : ammoByType.keySet()) {
+    				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
+    	            	tspan.setText(at.getShortName() + " (" + ammoByType.get(at) + ")");
+    	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
+    	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
+    	            }
+    	            ((Text)tspan.getParent()).rebuild();
+    	            if (totalShots > 30) {
+    	            	line += (int)Math.ceil(Math.min(100, ammoByType.get(at)) / 20.0) + 1;
+    	            } else {
+    	            	line += (int)Math.ceil(ammoByType.get(at) / 10.0) * 2 + 1;
+    	            }
+    			}
 
         		diagram.updateTime(0);
         		
