@@ -900,7 +900,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         		for (Mounted m : linkList) {
         			mount = new Mounted(getHandheld(), equip);
     	            getHandheld().addEquipment(mount, HandheldWeapon.LOC_GUNS, false);
-    	            m.setLinked(mount);
+    	            mount.setLinked(m);
         		}
         	} else {
 	            mount = new Mounted(getHandheld(), equip);

@@ -28,6 +28,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -138,21 +139,41 @@ public class PrintHandheld implements Printable {
         		
         		tspan = (Tspan)diagram.getElement(ID_ARMOR);
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
+        		
+        		Map<String,Integer> weaponCount = new HashMap<>();
+        		Map<String,EquipmentType> weaponType = new HashMap<>();
+        		for (Mounted m : handheld.getEquipment()) {
+        			if (m.getType() instanceof WeaponType
+        					|| (m.getType() instanceof MiscType
+        							&& m.getType().hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER))) {
+        				String eqName = m.getType().getShortName();
+        				if (m.getLinked() != null) {
+        					eqName += "+" + m.getLinked().getType().getShortName();
+        				}
+        				weaponCount.merge(eqName, 1, Integer::sum);
+        				weaponType.put(eqName, m.getType());
+        			}
+        		}
 
         		Map<String,List<Mounted>> weapons = handheld.getEquipment().stream()
         				.filter(m -> m.getType() instanceof WeaponType
         						|| (m.getType() instanceof MiscType
         								&& m.getType().hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER)))
-        				.collect(Collectors.groupingBy(m -> m.getType().getInternalName()));
+        				.collect(Collectors.groupingBy(m -> getEqDisplayName(m)));
         		int line = 0;
         		for (String name : weapons.keySet()) {
-        			EquipmentType eq = EquipmentType.get(name);
+        			final EquipmentType eq = weapons.get(name).get(0).getType();
 					tspan = (Tspan)diagram.getElement(ID_WEAPON_QTY + "_" + line);
 					tspan.setText(Integer.toString(weapons.get(name).size()));
 					((Text)tspan.getParent()).rebuild();
 					
+					String[] lines = name.split("\n");
 					tspan = (Tspan)diagram.getElement(ID_WEAPON_TYPE + "_" + line);
-					tspan.setText(eq.getName());
+					tspan.setText(lines[0]);
+					if (lines.length > 1) {
+						tspan = (Tspan)diagram.getElement(ID_WEAPON_TYPE + "_" + (line + 1));
+						tspan.setText(lines[1]);
+					}
 					((Text)tspan.getParent()).rebuild();
 					
 					if (eq instanceof WeaponType) {
@@ -190,6 +211,9 @@ public class PrintHandheld implements Printable {
 						((Text)tspan.getParent()).rebuild();
 					}
 					line++;
+					if (name.contains("\n")) {
+						line++;
+					}
         		}
         		
         		tspan = (Tspan)diagram.getElement(ID_BV);
@@ -300,6 +324,15 @@ public class PrintHandheld implements Printable {
         
         g2d.scale(pageFormat.getImageableWidth(), pageFormat.getImageableHeight());
     }
+	
+	private String getEqDisplayName(Mounted m) {
+		if (m.getLinkedBy() != null) {
+			return m.getType().getShortName() + "\nw/"
+					+ m.getLinkedBy().getType().getShortName();
+		} else {
+			return m.getType().getName();
+		}
+	}
 	
 	private void printArmor(Graphics2D g2d, int armor) {
 		double offsetX = 20;
