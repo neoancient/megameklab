@@ -156,28 +156,37 @@ public class PrintHandheld implements Printable {
 					((Text)tspan.getParent()).rebuild();
 					
 					if (eq instanceof WeaponType) {
+						WeaponType wtype = (WeaponType)eq;
 						tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + line);
 						tspan.setText(StringUtils.getEquipmentInfo(handheld, weapons.get(name).get(0)));
 						((Text)tspan.getParent()).rebuild();
 						
 						tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + line);
 						if (((WeaponType)eq).getMinimumRange() > 0) {
-							tspan.setText(Integer.toString(((WeaponType)eq).getMinimumRange()));
+							tspan.setText(Integer.toString(wtype.getMinimumRange()));
 						} else {
 							tspan.setText("—");
 						}
 						((Text)tspan.getParent()).rebuild();
 
 						tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + line);
-						tspan.setText(Integer.toString(((WeaponType)eq).getShortRange()));
+						tspan.setText(Integer.toString(wtype.getShortRange()));
 						((Text)tspan.getParent()).rebuild();
 
 						tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + line);
-						tspan.setText(Integer.toString(((WeaponType)eq).getMediumRange()));
+						if (wtype.getMediumRange() > wtype.getShortRange()) {
+							tspan.setText(Integer.toString(((WeaponType)eq).getMediumRange()));
+						} else {
+							tspan.setText("—");
+						}
 						((Text)tspan.getParent()).rebuild();
 
 						tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + line);
-						tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
+						if (wtype.getLongRange() > wtype.getMediumRange()) {
+							tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
+						} else {
+							tspan.setText("—");
+						}
 						((Text)tspan.getParent()).rebuild();
 					}
 					line++;
