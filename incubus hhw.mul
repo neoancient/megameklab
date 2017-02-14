@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<unit version="0.43.0" >
+
+		<entity chassis="Medium Chemical Laser" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="f6fd5080-e62e-41f9-bb45-b257fab119fe" camoCategory="-- No Camo --">
+			<pilot name="Leonidas Vassilikos" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="0721178a-23b2-4def-8769-89c06ebcb378"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Streak LRM" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="0c071734-7a9b-4450-8cc7-5aa55fceaa3a" camoCategory="-- No Camo --">
+			<pilot name="Marcia Chia" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="c4c0683e-4373-4718-946b-75096f597ec5"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="LRM" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="3a20fd60-e20b-4d12-9282-8b8150f384c4" camoCategory="-- No Camo --">
+			<pilot name="Patvakan Khostikian" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="b862efe7-39e9-4e78-9214-ae2444a481ed"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Streak SRM" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="e56d7a99-cd85-47e7-a6a3-ca451d7f261d" camoCategory="-- No Camo --">
+			<pilot name="Les Yun" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="8a76923c-2a76-4ffd-ba11-5021628fea8a"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="AP Gauss" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="58278600-d673-46c6-a765-68ef81695b7b" camoCategory="-- No Camo --">
+			<pilot name="Angelika Richard" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="08b47dbf-1eb6-42d4-8910-6b409ec13167"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Machine Gun" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="a5b2a896-ace8-40c4-b0a6-41b2dd10fbce" camoCategory="-- No Camo --">
+			<pilot name="Martha Koulaxizis" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="d53fab7f-9839-4ac3-bf25-94bb89cf3973"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="TAG" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="8b09cdd6-6ff4-4037-8405-9cd2800205b4" camoCategory="-- No Camo --">
+			<pilot name="Lupul Radu" size="1" nick="" gunnery="5" piloting="6" ejected="false" externalId="89eb3f03-779d-4216-b6ba-24ffd41a1b3c"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+</unit>

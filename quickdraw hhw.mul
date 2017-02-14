@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<unit version="0.43.0" >
+
+		<entity chassis="Heavy LB-X" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="15d7e871-9c13-49d1-afc2-0a9bc0e66d83" camoCategory="-- No Camo --">
+			<pilot name="Darlene de Koning" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="d0915223-5f44-48ab-bc11-6f182eef3879"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Heavy LRM" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="3e4f4d4b-307e-42da-886a-8bb6ef8d9482" camoCategory="-- No Camo --">
+			<pilot name="Damen Gonatas" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="f30e50ef-665c-479f-aa74-9167b228a7f1"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Heavy Rotary AC" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="001e8125-86bc-4e4f-97b9-402db1aba2a5" camoCategory="-- No Camo --">
+			<pilot name="Aylin Cikirikci" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="9d4c3d56-c94b-42e1-8434-1aebffb20632"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Heavy Streak" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="889090a7-a4d9-439e-825e-6729606173d0" camoCategory="-- No Camo --">
+			<pilot name="Kian Ti" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="a7a574db-cb42-4c3f-bcce-2d9fef950254"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Heavy Thunderbolt" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="f7e23a38-a656-44db-9b4c-5df116523145" camoCategory="-- No Camo --">
+			<pilot name="Dawn Elahi" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="b53bcc1b-cabf-4ae7-bb22-2a0bc32fb4db"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Light Autocannon" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="0a87fb20-3942-496c-a63d-cf3692dd7ec0" camoCategory="-- No Camo --">
+			<pilot name="Lina Silivasi" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="d0fc7c70-d40e-4c44-ad7d-0cd868eb87d7"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Light Anti-Infantry" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="dd2a1e50-bad9-4652-ad7b-651bd6e58509" camoCategory="-- No Camo --">
+			<pilot name="Abizar Ewansiha" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="c2d61c09-d321-4812-a85a-20747b047a33"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+		<entity chassis="Light Laser" model="" type="None" commander="false" offboard="false" hidden="false" deployment="0" deploymentZone="-1" neverDeployed="true" externalId="ad28bc06-b911-42ec-a181-1ae9bd39f80a" camoCategory="-- No Camo --">
+			<pilot name="Scott Hsi" size="1" nick="" gunnery="4" piloting="5" ejected="false" externalId="0d43802b-03ca-4646-bdea-dd232852e03f"/>
+      <motive damage="0" penalty="0"/>
+			<location index="0" isDestroyed="true" /> GUNS
+		</entity>
+
+</unit>

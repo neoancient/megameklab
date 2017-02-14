@@ -108,7 +108,7 @@ public class StatusBar extends ITab {
     private void getFluffImage() {
         //copied from structureTab
         FileDialog fDialog = new FileDialog(getParentFrame(), "Image Path", FileDialog.LOAD);
-        fDialog.setDirectory(new File(ImageHelper.fluffPath).getAbsolutePath() + File.separatorChar + ImageHelper.imageMech + File.separatorChar);
+        fDialog.setDirectory(new File(ImageHelper.fluffPath).getAbsolutePath() + File.separatorChar + ImageHelper.imageHandheld + File.separatorChar);
         /*
          //This does not seem to be working
         if (getMech().getFluff().getMMLImagePath().trim().length() > 0) {
@@ -118,7 +118,7 @@ public class StatusBar extends ITab {
             fDialog.setDirectory(fullPath);
             fDialog.setFile(imageName);
         } else {
-            fDialog.setDirectory(new File(ImageHelper.fluffPath).getAbsolutePath() + File.separatorChar + ImageHelper.imageMech + File.separatorChar);
+            fDialog.setDirectory(new File(ImageHelper.fluffPath).getAbsolutePath() + File.separatorChar + ImageHelper.imageHandheld + File.separatorChar);
             fDialog.setFile(getMech().getChassis() + " " + getMech().getModel() + ".png");
         }
         */

@@ -342,12 +342,12 @@ public class PrintHandheld implements Printable {
 	}
 	
     private void printFluffImage(Graphics2D g2d) {
-        Image img = ImageHelper.getFluffImage(handheld, ImageHelper.imageMech);
+        Image img = ImageHelper.getFluffImage(handheld, ImageHelper.imageHandheld);
         int width = img.getWidth(null);
         int height = img.getHeight(null);
         double scale = Math.min(48.0 / width, 48.0 / height);
-        int	drawingX = 440 - (width / 2);
-        int drawingY = 48 - (height / 2);
+        int	drawingX = 440 - (int)Math.round(width * scale / 2);
+        int drawingY = 42 - (int)Math.round(height * scale / 2);
         AffineTransform xform = new AffineTransform(scale, 0, 0, scale, drawingX, drawingY);
         g2d.drawImage(img, xform, null);
     }
