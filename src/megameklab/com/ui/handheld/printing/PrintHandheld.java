@@ -260,7 +260,9 @@ public class PrintHandheld implements Printable {
     			line = 0;
     			for (AmmoType at : ammoByType.keySet()) {
     				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
-    	            	tspan.setText(at.getShortName());
+    	            tspan.setText(at.getShortName()
+    	            		.replace(at.getSubMunitionName(), "")
+    	            		.replace("Ammo", "").trim());
     	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
     	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
     	            }
