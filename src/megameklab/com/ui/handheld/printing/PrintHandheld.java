@@ -31,6 +31,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ import megameklab.com.util.StringUtils;
  */
 public class PrintHandheld implements Printable {
 
-	private final static int VERTICAL_MARGIN = 74;
+	private final static int[] VERTICAL_MARGIN = {74, 111, 148};
 	
 	/* Id tags of elements in the SVG file */
 	private final static String ID_WEAPON_NAME = "tspanWeaponName";
@@ -77,6 +78,11 @@ public class PrintHandheld implements Printable {
 	private final static int AMMO_LINE_SPARSE 	= 1;
 	private final static int AMMO_LINE_DENSE 	= 2;
 	
+	private final static int TEMPLATE_STANDARD = 0;
+	private final static int TEMPLATE_LARGE    = 1;
+	private final static int TEMPLATE_VLARGE   = 2;
+	private final static int TEMPLATE_BLANK	   = 3;
+	
 	private HandheldWeapon handheld = null;
     private ArrayList<HandheldWeapon> handheldList;
     PrinterJob masterPrintJob;
@@ -87,7 +93,6 @@ public class PrintHandheld implements Printable {
         this.masterPrintJob = masterPrintJob;
     }
 
-    
 	/* (non-Javadoc)
 	 * @see java.awt.print.Printable#print(java.awt.Graphics, java.awt.print.PageFormat, int)
 	 */
@@ -109,7 +114,19 @@ public class PrintHandheld implements Printable {
         
         SVGDiagram diagram;
         
-        int stop = Math.min(9, handheldList.size() - currentPosition);
+        ArrayList<Integer> templateList = new ArrayList<>();
+        double space = 0.0;
+        while (space <= 8) {
+        	if (currentPosition + templateList.size() < handheldList.size()) {
+	        	int template = requiredTemplate(handheldList.get(currentPosition + templateList.size()));
+	        	templateList.add(template);
+	        	space += 1 + template * 0.5;
+        	} else {
+        		templateList.add(TEMPLATE_BLANK);
+        		space++;
+        	}
+        }
+
 		diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Sheet.svg"));
 
         try {
@@ -123,15 +140,21 @@ public class PrintHandheld implements Printable {
             	printFluffImage(g2d);
             }
         	
-            for (int pos = 0; pos < 9; pos++) {
-            	if (pos >= stop) {
+            for (int pos = 0; pos < templateList.size(); pos++) {
+            	if (templateList.get(pos) == TEMPLATE_BLANK) {
                 	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon_Blank.svg"));
                 	diagram.render(g2d);
-                	g2d.translate(0, VERTICAL_MARGIN);
+                	g2d.translate(0, VERTICAL_MARGIN[0]);
                 	continue;
             	}
-            	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
         		handheld = handheldList.get(pos + currentPosition);
+            	if (templateList.get(pos) == TEMPLATE_VLARGE) {
+                	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon_VLarge.svg"));
+            	} else if (templateList.get(pos) == TEMPLATE_LARGE) {
+                	diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon_Large.svg"));            		
+            	} else {
+            		diagram = ImageHelper.loadSVGImage(new File("data/images/recordsheets/Handheld_Weapon.svg"));
+            	}
         		tspan = (Tspan)diagram.getElement(ID_WEAPON_NAME);
         		tspan.setText(handheld.getShortName() + " Weapon ("
         				+ new DecimalFormat("0.#").format(handheld.getWeight()) + " tons)");
@@ -233,14 +256,10 @@ public class PrintHandheld implements Printable {
         					m.getBaseShotsLeft(), Integer::sum);
         		}
         		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
-        		int maxPerAmmoType = 160;
-        		if (ammoByType.size() > 1) {
-        			maxPerAmmoType = 100;
-        		}
 
-        		int[] pips = new int[16];
-        		int[] sparsePips = new int[16];
-        		int[] densePips = new int[16];
+        		int[] pips = new int[32];
+        		int[] sparsePips = new int[32];
+        		int[] densePips = new int[32];
         		
         		line = 0;
         		for (AmmoType at : ammoByType.keySet()) {
@@ -253,7 +272,7 @@ public class PrintHandheld implements Printable {
     	            }
     	            ((Text)tspan.getParent()).rebuild();
     				line++;
-        			int shots = Math.min(maxPerAmmoType, ammoByType.get(at));
+        			int shots = ammoByType.get(at);
         			if (shots <= 10 && ammoByType.size() == 1) {
         				sparsePips[line] = Math.min(shots, 5);
         				line += 2;
@@ -290,7 +309,7 @@ public class PrintHandheld implements Printable {
             	
             	printArmor(g2d, handheld.getTotalOArmor());
             	
-            	for (int i = 0; i < 8; i++) {
+            	for (int i = 0; i < 32; i++) {
             		if (pips[i] > 0) {
             			printAmmoLine(g2d, AMMO_LINE, pips[i], i);
             		}
@@ -302,7 +321,7 @@ public class PrintHandheld implements Printable {
             		}
             	}
 
-        		g2d.translate(0, VERTICAL_MARGIN);
+        		g2d.translate(0, VERTICAL_MARGIN[templateList.get(pos)]);
             }
         } catch (SVGException ex) {
         	ex.printStackTrace();
@@ -311,6 +330,49 @@ public class PrintHandheld implements Printable {
         g2d.scale(pageFormat.getImageableWidth(), pageFormat.getImageableHeight());
     }
 	
+    private int requiredTemplate(HandheldWeapon hhw) {
+    	int template = TEMPLATE_STANDARD;
+    	if (hhw.getTotalOArmor() > 128) {
+    		return TEMPLATE_VLARGE;
+    	}
+    	if (hhw.getTotalOArmor() > 64) {
+    		template = TEMPLATE_LARGE;
+    	}
+
+    	Set<String> wpnRows = hhw.getEquipment().stream()
+    			.filter(m -> m.getType() instanceof WeaponType
+    					|| (m.getType() instanceof MiscType
+    							&& m.getType().hasFlag(MiscType.F_VEHICLE_MINE_DISPENSER)))
+    			.map(this::getEqDisplayName)
+    			.collect(Collectors.toSet());
+    	int wpnRowCount = wpnRows.stream().mapToInt(r -> r.contains("\n")? 2 : 1).sum();
+    	if (wpnRowCount > 7) {
+    		return TEMPLATE_VLARGE;
+    	}
+    	if (wpnRowCount > 3) {
+    		template = TEMPLATE_LARGE;
+    	}
+
+    	Map<EquipmentType,Integer> ammoByType = new HashMap<>();
+    	for (Mounted m : hhw.getAmmo()) {
+    		ammoByType.merge(m.getType(), m.getBaseShotsLeft(), Integer::sum);
+    	}
+    	int ammoLines = 0;
+    	for (int shots : ammoByType.values()) {
+    		ammoLines += 2 + shots / 20;
+    		if (shots % 20 > 0) {
+    			ammoLines++;
+    		}
+    	}
+    	if (ammoLines > 15) {
+    		return TEMPLATE_VLARGE;
+    	}
+    	if (ammoLines > 7) {
+    		return TEMPLATE_LARGE;
+    	}
+    	return template;
+    }
+    
 	private String getEqDisplayName(Mounted m) {
 		if (m.getLinkedBy() != null) {
 			return m.getType().getShortName() + "\nw/"
@@ -392,7 +454,7 @@ public class PrintHandheld implements Printable {
     public void print(HashPrintRequestAttributeSet aset) {
 
         try {
-            for (; currentPosition < handheldList.size(); currentPosition += 8) {
+        	while (currentPosition < handheldList.size()) {
                 PrinterJob pj = PrinterJob.getPrinterJob();
                 pj.setPrintService(masterPrintJob.getPrintService());
 
@@ -416,6 +478,11 @@ public class PrintHandheld implements Printable {
                     ex.printStackTrace();
                 }
                 System.gc();
+                double space = 0;
+                while (space <= 8) {
+                	space += 1 + requiredTemplate(handheldList.get(currentPosition)) * 0.5;
+                	currentPosition++;
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
