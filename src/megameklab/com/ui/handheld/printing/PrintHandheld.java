@@ -366,24 +366,27 @@ public class PrintHandheld implements Printable {
 	}
 	
 	private void printAmmoLine(Graphics2D g2d, int lineType, int ammo, int line) {
-		double startX = 458;
+		double startX = 460;
 		double startY = 110;
 		double size = 7.394;
 		
-		double offsetX = 10.832;
+		double offsetX = 10.61;
 		double offsetY = 4.6724;
 		
 		if (lineType == AMMO_LINE_SPARSE) {
-			offsetX = 24.372;
+			offsetX = 23.872;
 		} else if (lineType == AMMO_LINE_DENSE) {
-			offsetX = 5.5;
+			offsetX = 5.124;
 			size = 3.698;
+			if (line % 2 == 1) {
+				startX += offsetX * 0.5;
+			}
 		}
 		
 		double x = startX;
 		double y = startY + offsetY * line;
 		g2d.setPaint(Color.BLACK);
-		for (int i = 0; i < Math.min(50, ammo); i++) {
+		for (int i = 0; i < ammo; i++) {
 			g2d.draw(new Ellipse2D.Double(x, y, size, size));
 			x += offsetX;
 		}
