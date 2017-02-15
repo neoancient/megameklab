@@ -238,20 +238,21 @@ public class PrintHandheld implements Printable {
         			maxPerAmmoType = 100;
         		}
 
-        		int[] pips = new int[8];
-        		int[] sparsePips = new int[8];
-        		int[] densePips = new int[8];
+        		int[] pips = new int[16];
+        		int[] sparsePips = new int[16];
+        		int[] densePips = new int[16];
         		
         		line = 0;
         		for (AmmoType at : ammoByType.keySet()) {
-        			if (ammoByType.size() > 1) {
-        				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
-        				tspan.setText(at.getShortName());
-        				((Text)tspan.getParent()).rebuild();
-        				if (line > 0) {
-        					line += 2;
-        				}
-        			}
+    				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
+    	            tspan.setText(at.getShortName()
+    	            		.replace(at.getSubMunitionName(), "")
+    	            		.replace("Ammo", "").trim() + " (" + ammoByType.get(at) + ")");
+    	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
+    	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
+    	            }
+    	            ((Text)tspan.getParent()).rebuild();
+    				line++;
         			int shots = Math.min(maxPerAmmoType, ammoByType.get(at));
         			if (shots <= 10 && ammoByType.size() == 1) {
         				sparsePips[line] = Math.min(shots, 5);
@@ -279,24 +280,9 @@ public class PrintHandheld implements Printable {
             				line++;
         				}
         			}
+        			//Add extra line for next label
+        			line++;
         		}
-
-    			line = 0;
-    			for (AmmoType at : ammoByType.keySet()) {
-    				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
-    	            tspan.setText(at.getShortName()
-    	            		.replace(at.getSubMunitionName(), "")
-    	            		.replace("Ammo", "").trim());
-    	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
-    	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
-    	            }
-    	            ((Text)tspan.getParent()).rebuild();
-    	            if (totalShots > 30) {
-    	            	line += (int)Math.ceil(Math.min(100, ammoByType.get(at)) / 20.0) + 1;
-    	            } else {
-    	            	line += (int)Math.ceil(ammoByType.get(at) / 10.0) * 2 + 1;
-    	            }
-    			}
 
         		diagram.updateTime(0);
         		

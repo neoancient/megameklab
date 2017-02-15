@@ -436,10 +436,10 @@
        id="text7401"><tspan
          id="tspan10564">Ammo:</tspan></text>
 <text
-       transform="matrix(1,0,0,-1,459,674.707)"
+       transform="matrix(1,0,0,-1,459,670.05)"
        style="font-variant:normal;font-weight:600;font-stretch:normal;font-size:7px;font-family:'TDTMR Y +Eurostile LT Std';-inkscape-font-specification:EurostileLTStd-Demi;writing-mode:lr-tb;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
        id="text10566"><tspan
-         id="tspanAmmoType_0" /></text>
+         id="tspanAmmoType_0">None</tspan></text>
 <text
        transform="matrix(1,0,0,-1,460,665.36)"
        display="none"
