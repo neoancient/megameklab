@@ -317,6 +317,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
                     int selected = masterEquipmentTable.convertRowIndexToModel(view);
                     EquipmentType equip = masterEquipmentList.getType(selected);
                     addEquipment(equip);
+                    refresh.refreshStatus();
                     fireTableRefresh();
                 }
             }
@@ -776,6 +777,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             			.collect(Collectors.toList());
                 toRemove.forEach(m -> UnitUtil.removeMounted(getHandheld(), m));
             }
+            getHandheld().recalcHeat();
         } else if (e.getActionCommand().equals(REMOVEALL_COMMAND)) {
             removeAllEquipment();
         }
@@ -945,6 +947,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
         }
         if (success) {
         	equipmentList.addCrit(mount);
+        	getHandheld().recalcHeat();
         }
     }
 
@@ -958,6 +961,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             equipmentList.removeMounted(count);
         }
         equipmentList.removeAllCrits();
+        getHandheld().recalcHeat();
     }
 
     private void fireTableRefresh() {
@@ -1158,6 +1162,7 @@ public class StructureTab extends ITab implements ActionListener, ChangeListener
             int selected = masterEquipmentTable.convertRowIndexToModel(view);
             EquipmentType equip = masterEquipmentList.getType(selected);
             addEquipment(equip);
+            refresh.refreshStatus();
             fireTableRefresh();
         }
     }
