@@ -13,6 +13,7 @@
  */
 package megameklab.com.ui.handheld.printing;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -32,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -42,7 +42,6 @@ import com.kitfox.svg.SVGDiagram;
 import com.kitfox.svg.SVGException;
 import com.kitfox.svg.Text;
 import com.kitfox.svg.Tspan;
-import com.kitfox.svg.animation.AnimationElement;
 
 import megamek.common.AmmoType;
 import megamek.common.EquipmentType;
@@ -52,6 +51,7 @@ import megamek.common.Mounted;
 import megamek.common.WeaponType;
 import megameklab.com.util.ImageHelper;
 import megameklab.com.util.StringUtils;
+import megameklab.com.util.UnitUtil;
 
 /**
  * @author Neoancient
@@ -71,12 +71,13 @@ public class PrintHandheld implements Printable {
 	private final static String ID_WEAPON_MED = "tspanWpnMed";
 	private final static String ID_WEAPON_LONG = "tspanWpnLng";
 	private final static String ID_ARMOR = "tspanArmor";
-	private final static String ID_AMMO_TYPE = "tspanAmmoType";
 	private final static String ID_BV = "tspanBV";
 
-	private final static int AMMO_LINE 			= 0;
-	private final static int AMMO_LINE_SPARSE 	= 1;
+	private final static int AMMO_LINE_SPARSE 	= -1;
+	private final static int AMMO_LINE_STANDARD = 0;
+	private final static int AMMO_LINE_HEAVY	= 1;
 	private final static int AMMO_LINE_DENSE 	= 2;
+	private final int[] AMMO_LENGTH = {10, 16, 20};
 	
 	private final static int TEMPLATE_STANDARD = 0;
 	private final static int TEMPLATE_LARGE    = 1;
@@ -201,37 +202,74 @@ public class PrintHandheld implements Printable {
 					
 					if (eq instanceof WeaponType) {
 						WeaponType wtype = (WeaponType)eq;
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + line);
-						tspan.setText(StringUtils.getEquipmentInfo(handheld, weapons.get(name).get(0)));
-						((Text)tspan.getParent()).rebuild();
-						
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + line);
-						if (((WeaponType)eq).getMinimumRange() > 0) {
-							tspan.setText(Integer.toString(wtype.getMinimumRange()));
-						} else {
+						if (wtype.getAmmoType() == AmmoType.T_MML) {
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + line);
+							tspan.setText("1/Msl [M,C,S]");
+							((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + (line + 1));
+							tspan.setText("2/Msl [M,C,S]");
+							((Text)tspan.getParent()).rebuild();
+							
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + line);
+							tspan.setText("6");
+							((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + (line + 1));
 							tspan.setText("—");
-						}
-						((Text)tspan.getParent()).rebuild();
+							((Text)tspan.getParent()).rebuild();
 
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + line);
-						tspan.setText(Integer.toString(wtype.getShortRange()));
-						((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + line);
+							tspan.setText("7");
+							((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + (line + 1));
+							tspan.setText("3");
+							((Text)tspan.getParent()).rebuild();
 
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + line);
-						if (wtype.getMediumRange() > wtype.getShortRange()) {
-							tspan.setText(Integer.toString(((WeaponType)eq).getMediumRange()));
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + line);
+							tspan.setText("14");
+							((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + (line + 1));
+							tspan.setText("6");
+							((Text)tspan.getParent()).rebuild();
+
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + line);
+							tspan.setText("21");
+							((Text)tspan.getParent()).rebuild();
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + (line + 1));
+							tspan.setText("9");
+							((Text)tspan.getParent()).rebuild();
 						} else {
-							tspan.setText("—");
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_DMG + "_" + line);
+							tspan.setText(StringUtils.getEquipmentInfo(handheld, weapons.get(name).get(0)));
+							((Text)tspan.getParent()).rebuild();
+							
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MIN + "_" + line);
+							if (((WeaponType)eq).getMinimumRange() > 0) {
+								tspan.setText(Integer.toString(wtype.getMinimumRange()));
+							} else {
+								tspan.setText("—");
+							}
+							((Text)tspan.getParent()).rebuild();
+	
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_SHORT + "_" + line);
+							tspan.setText(Integer.toString(wtype.getShortRange()));
+							((Text)tspan.getParent()).rebuild();
+	
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_MED + "_" + line);
+							if (wtype.getMediumRange() > wtype.getShortRange()) {
+								tspan.setText(Integer.toString(((WeaponType)eq).getMediumRange()));
+							} else {
+								tspan.setText("—");
+							}
+							((Text)tspan.getParent()).rebuild();
+	
+							tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + line);
+							if (wtype.getLongRange() > wtype.getMediumRange()) {
+								tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
+							} else {
+								tspan.setText("—");
+							}
+							((Text)tspan.getParent()).rebuild();
 						}
-						((Text)tspan.getParent()).rebuild();
-
-						tspan = (Tspan)diagram.getElement(ID_WEAPON_LONG + "_" + line);
-						if (wtype.getLongRange() > wtype.getMediumRange()) {
-							tspan.setText(Integer.toString(((WeaponType)eq).getLongRange()));
-						} else {
-							tspan.setText("—");
-						}
-						((Text)tspan.getParent()).rebuild();
 					}
 					line++;
 					if (name.contains("\n")) {
@@ -247,79 +285,60 @@ public class PrintHandheld implements Printable {
         		tspan.setText(Integer.toString(handheld.getTotalOArmor()));
         		((Text)tspan.getParent()).rebuild();
 
-        		//Collect all ammo by type, sorting with the type shortest name first (since
-        		//it has the least space to print).
-        		Map<AmmoType,Integer> ammoByType = new TreeMap<>((i1, i2) ->
-        			i1.getShortName().length() - i2.getShortName().length());
-        		for (Mounted m : handheld.getAmmo()) {
-        			ammoByType.merge((AmmoType)m.getType(),
-        					m.getBaseShotsLeft(), Integer::sum);
-        		}
-        		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
-
-        		int[] pips = new int[32];
-        		int[] sparsePips = new int[32];
-        		int[] densePips = new int[32];
-        		
-        		line = 0;
-        		for (AmmoType at : ammoByType.keySet()) {
-    				tspan = (Tspan)diagram.getElement(ID_AMMO_TYPE + "_" + line);
-    	            tspan.setText(at.getShortName()
-    	            		.replace(at.getSubMunitionName(), "")
-    	            		.replace("Ammo", "").trim() + " (" + ammoByType.get(at) + ")");
-    	            if (tspan.getParent().hasAttribute("display", AnimationElement.AT_XML)) {
-    	            	tspan.getParent().removeAttribute("display", AnimationElement.AT_XML);
-    	            }
-    	            ((Text)tspan.getParent()).rebuild();
-    				line++;
-        			int shots = ammoByType.get(at);
-        			if (shots <= 10 && ammoByType.size() == 1) {
-        				sparsePips[line] = Math.min(shots, 5);
-        				line += 2;
-        				if (shots > 5) {
-            				sparsePips[line] = shots - 5;
-            				line += 2;
-        				}
-        			} else if (totalShots <= 40) {
-        				for (int i = 0; i < shots / 10; i++) {
-        					pips[line] = 10;
-            				line += 2;
-        				}
-        				if (shots % 10 > 0) {
-            				pips[line] = shots % 10;
-            				line += 2;
-        				}
-        			} else {
-        				for (int i = 0; i < shots / 20; i++) {
-        					densePips[line] = 20;
-        					line++;
-        				}
-        				if (shots % 20 > 0) {
-            				densePips[line] = shots % 20;
-            				line++;
-        				}
-        			}
-        			//Add extra line for next label
-        			line++;
-        		}
-
         		diagram.updateTime(0);
         		
             	diagram.render(g2d);
             	
             	printArmor(g2d, handheld.getTotalOArmor());
             	
-            	for (int i = 0; i < 32; i++) {
-            		if (pips[i] > 0) {
-            			printAmmoLine(g2d, AMMO_LINE, pips[i], i);
-            		}
-            		if (sparsePips[i] > 0) {
-            			printAmmoLine(g2d, AMMO_LINE_SPARSE, sparsePips[i], i);
-            		}
-            		if (densePips[i] > 0) {
-            			printAmmoLine(g2d, AMMO_LINE_DENSE, densePips[i], i);
-            		}
-            	}
+        		//Collect all ammo by type, sorting with the type shortest name first (since
+        		//it has the least space to print).
+        		Map<String,Integer> ammoByType = handheld.getAmmo().stream()
+        				.collect(Collectors.groupingBy(m -> m.getType().getShortName(),
+        						Collectors.summingInt(Mounted::getBaseShotsLeft)));
+        		int totalShots = ammoByType.values().stream().mapToInt(Integer::intValue).sum();
+
+        		float yPos = 106;
+        		g2d.setFont(UnitUtil.deriveFont(7));
+        		g2d.setPaint(Color.BLACK);
+        		g2d.setStroke(new BasicStroke(0.9f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER));
+        		if (ammoByType.isEmpty()) {
+        			printAmmoLabel(g2d, "None", yPos);
+        		} else {
+        			int lineType = AMMO_LINE_SPARSE;
+        			if (ammoByType.size() > 1 || totalShots > 10) {
+        				for (int i = 0; i < AMMO_LENGTH.length; i++) {
+        					lineType = i;
+        					int lines = 0;
+        					for (Integer shots : ammoByType.values()) {
+        						lines++;
+        						lines += shots / AMMO_LENGTH[lineType];
+        						if (shots % AMMO_LENGTH[lineType] > 0) {
+        							lines++;
+        						}
+        					}
+        					if (lines <= 5 + 4 * (templateList.get(pos))) {
+        						break;
+        					}
+        				}
+        			}
+	        		for (String at : ammoByType.keySet()) {
+	        			yPos = printAmmoLabel(g2d, at + " (" + ammoByType.get(at) + ")", yPos);
+	        			int shots = ammoByType.get(at);
+	        			if (lineType == AMMO_LINE_SPARSE) {
+	        				yPos = printAmmoLine(g2d, AMMO_LINE_SPARSE, shots, yPos, false);
+	        			} else {
+	        				boolean indent = false;
+	        				for (int i = 0; i < shots / AMMO_LENGTH[lineType]; i++) {
+	            				yPos = printAmmoLine(g2d, lineType, AMMO_LENGTH[lineType], yPos, indent);
+	            				indent = !indent;
+	        				}
+	        				if (shots % AMMO_LENGTH[lineType] > 0) {
+	            				yPos = printAmmoLine(g2d, lineType, shots % AMMO_LENGTH[lineType], yPos, indent);
+	        				}
+	        			}
+	        		}
+        		}
 
         		g2d.translate(0, VERTICAL_MARGIN[templateList.get(pos)]);
             }
@@ -378,6 +397,11 @@ public class PrintHandheld implements Printable {
 			return m.getType().getShortName() + "\nw/"
 					+ m.getLinkedBy().getType().getShortName();
 		} else {
+			if (m.getType() instanceof WeaponType
+					&& ((WeaponType)m.getType()).getAmmoType() == AmmoType.T_MML) {
+				return m.getType().getName() + " (LRM)\n"
+						+ m.getType().getName() + " (SRM)";
+			}
 			return m.getType().getName();
 		}
 	}
@@ -413,31 +437,51 @@ public class PrintHandheld implements Printable {
 		}
 	}
 	
-	private void printAmmoLine(Graphics2D g2d, int lineType, int ammo, int line) {
-		double startX = 460;
-		double startY = 110;
-		double size = 7.394;
+	private float printAmmoLine(Graphics2D g2d, int lineType, int ammo, float yPos, boolean indent) {
+		float xPos = 459;
+		float offsetX;
+		float offsetY;
+		float size;
 		
-		double offsetX = 10.61;
-		double offsetY = 4.6724;
-		
-		if (lineType == AMMO_LINE_SPARSE) {
-			offsetX = 23.872;
-		} else if (lineType == AMMO_LINE_DENSE) {
-			offsetX = 5.124;
-			size = 3.698;
-			if (line % 2 == 1) {
-				startX += offsetX * 0.5;
+		switch (lineType) {
+		case AMMO_LINE_SPARSE:
+			size = 7.394f;
+			offsetX = 10.61f;
+			if (ammo > 1) {
+				offsetX *= 9f / (ammo - 1);
 			}
+			offsetY = 8.0928f;
+			break;
+		case AMMO_LINE_HEAVY:
+			size = 4.621f;
+			offsetX = 6.366f;
+			offsetY = 5.058f;
+			break;
+		case AMMO_LINE_DENSE:
+			size = 3.698f;
+			offsetX = 5.124f;
+			offsetY = 4.6724f;
+			break;
+		case AMMO_LINE_STANDARD:
+		default:
+			size = 7.394f;
+			offsetX = 10.61f;
+			offsetY = 8.0928f;
+			break;
 		}
-		
-		double x = startX;
-		double y = startY + offsetY * line;
-		g2d.setPaint(Color.BLACK);
+		if (indent) {
+			xPos += offsetX * 0.5f;
+		}
 		for (int i = 0; i < ammo; i++) {
-			g2d.draw(new Ellipse2D.Double(x, y, size, size));
-			x += offsetX;
+			g2d.draw(new Ellipse2D.Double(xPos, yPos, size, size));
+			xPos += offsetX;
 		}
+		return yPos + offsetY;
+	}
+	
+	private float printAmmoLabel(Graphics2D g2d, String label, float y) {
+		g2d.drawString(label, 460, y + 6);
+		return y + 8;
 	}
 	
     private void printFluffImage(Graphics2D g2d) {
@@ -479,7 +523,7 @@ public class PrintHandheld implements Printable {
                 }
                 System.gc();
                 double space = 0;
-                while (space <= 8) {
+                while (space <= 8 && currentPosition < handheldList.size()) {
                 	space += 1 + requiredTemplate(handheldList.get(currentPosition)) * 0.5;
                 	currentPosition++;
                 }
