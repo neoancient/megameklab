@@ -289,7 +289,7 @@ public class PrintHandheld implements Printable {
         		
             	diagram.render(g2d);
             	
-            	printArmor(g2d, handheld.getTotalOArmor());
+            	printArmor(g2d, handheld.getTotalOArmor(), templateList.get(pos));
             	
         		//Collect all ammo by type, sorting with the type shortest name first (since
         		//it has the least space to print).
@@ -406,7 +406,7 @@ public class PrintHandheld implements Printable {
 		}
 	}
 	
-	private void printArmor(Graphics2D g2d, int armor) {
+	private void printArmor(Graphics2D g2d, int armor, int template) {
 		double offsetX = 20;
 		double offsetY = 10;
 		double startX = 280;
@@ -415,7 +415,8 @@ public class PrintHandheld implements Printable {
 		
 		g2d.setPaint(Color.BLACK);
 		
-		if (armor > 32) {
+		int maxArmor = 64 * (1 + template);
+		if (armor > maxArmor / 2) {
 			offsetX = 10;
 			offsetY = 8.66;
 		}
@@ -423,7 +424,7 @@ public class PrintHandheld implements Printable {
 		double x = startX;
 		double y = startY;
 		boolean indent = false;
-		for (int a = 0; a < Math.min(64, armor); a++) {
+		for (int a = 0; a < Math.min(maxArmor, armor); a++) {
 			g2d.draw(new Ellipse2D.Double(x, y, 7.394, 7.394));
 			x += offsetX;
 			if (x >= xEnd) {
