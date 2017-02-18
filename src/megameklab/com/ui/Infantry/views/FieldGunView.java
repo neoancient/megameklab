@@ -54,6 +54,7 @@ import megamek.common.weapons.ArtilleryCannonWeapon;
 import megamek.common.weapons.ArtilleryWeapon;
 import megamek.common.weapons.GaussWeapon;
 import megamek.common.weapons.HVACWeapon;
+import megamek.common.weapons.LBXACWeapon;
 import megamek.common.weapons.RACWeapon;
 import megamek.common.weapons.RifleWeapon;
 import megamek.common.weapons.UACWeapon;
@@ -161,6 +162,9 @@ public class FieldGunView extends IView implements ActionListener {
                     || eq instanceof UACWeapon
                     || eq instanceof RifleWeapon
                     || eq instanceof ArtilleryCannonWeapon) {
+                allTypes.add(eq);
+            }
+            if ((eq instanceof LBXACWeapon)) {
                 allTypes.add(eq);
             }
             if (eq instanceof GaussWeapon
@@ -364,6 +368,7 @@ public class FieldGunView extends IView implements ActionListener {
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVSL), false);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVSW), false);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVCL), false);
+            columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVDA), false);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DINTRO), false);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DEXTINCT), false);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DREINTRO), false);
@@ -386,6 +391,7 @@ public class FieldGunView extends IView implements ActionListener {
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVSL), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVSW), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVCL), true);
+            columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_AVDA), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DINTRO), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DEXTINCT), true);
             columnModel.setColumnVisible(columnModel.getColumnByModelIndex(EquipmentTableModel.COL_DREINTRO), true);
